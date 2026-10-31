@@ -42,3 +42,6 @@ next-env.d.ts
 
 # lighthouse
 lighthouse-report*.json
+
+.vercel
+.env*

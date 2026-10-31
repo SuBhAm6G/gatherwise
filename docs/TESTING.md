@@ -91,18 +91,21 @@ Audited against `http://localhost:3000` via Chrome Headless Lighthouse:
 ## 5. Verification Commands
 
 ```bash
-# 1. Run all 128 tests
-npx vitest run
+# 1. Primary test command (Runs all 128 tests across 9 suites)
+npm test
+# OR
+npm run test
 
-# 2. Run TypeScript type check
+# 2. Run TypeScript type check (Zero errors)
 npx tsc --noEmit
 
-# 3. Run ESLint check
+# 3. Run ESLint check (Zero warnings, zero errors)
 npx eslint src/
 
-# 4. Run pre-submission security and hygiene audit
+# 4. Run pre-submission security and hygiene audit (8/8 passed)
 npx tsx scripts/audit.ts
 
 # 5. Build production bundle
 npm run build
 ```
+
