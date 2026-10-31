@@ -1,7 +1,5 @@
 'use client'
 
-import React from 'react'
-
 interface AssistantQuickPromptsProps {
   prompts: string[]
   isLoading: boolean
@@ -14,7 +12,10 @@ export function AssistantQuickPrompts({
   onSelectPrompt,
 }: AssistantQuickPromptsProps) {
   return (
-    <nav aria-label="Suggested quick questions" className="px-6 py-2 border-t border-white/5 bg-slate-900/40 flex items-center gap-2 overflow-x-auto scrollbar-none text-xs">
+    <nav
+      aria-label="Suggested quick questions"
+      className="px-6 py-2 border-t border-white/5 bg-slate-900/40 flex items-center gap-2 overflow-x-auto scrollbar-none text-xs"
+    >
       <span className="text-slate-500 font-semibold text-2xs shrink-0">Suggestions:</span>
       {prompts.map((q, idx) => (
         <button

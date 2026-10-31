@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { VenuePreference, DiyPreference, AudienceAgeGroup } from '@/lib/domain/types'
 
 interface WizardStep3PreferencesProps {

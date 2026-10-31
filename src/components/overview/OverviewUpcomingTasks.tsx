@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { PlanTask } from '@/lib/domain/types'
 import { ArrowRight, CheckCircle2 } from 'lucide-react'
 
@@ -50,7 +49,9 @@ export function OverviewUpcomingTasks({
                   aria-label={`Mark task completed: ${task.title}`}
                   className="w-5 h-5 rounded border border-white/20 hover:border-emerald-400 flex items-center justify-center shrink-0 transition-colors"
                 >
-                  {task.status === 'completed' && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" />}
+                  {task.status === 'completed' && (
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" />
+                  )}
                 </button>
                 <div className="min-w-0">
                   <span className="font-medium text-white block truncate">{task.title}</span>
@@ -62,8 +63,8 @@ export function OverviewUpcomingTasks({
                   task.priority === 'critical'
                     ? 'bg-rose-500/20 text-rose-300'
                     : task.priority === 'high'
-                    ? 'bg-amber-500/20 text-amber-300'
-                    : 'bg-indigo-500/20 text-indigo-300'
+                      ? 'bg-amber-500/20 text-amber-300'
+                      : 'bg-indigo-500/20 text-indigo-300'
                 }`}
               >
                 {task.priority}

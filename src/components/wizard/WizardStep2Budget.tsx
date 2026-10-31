@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { PlanningUrgency } from '@/lib/domain/types'
 import { SUPPORTED_CURRENCIES } from '@/lib/domain/constants'
 import { ShieldAlert } from 'lucide-react'
@@ -78,7 +77,10 @@ export function WizardStep2Budget({
 
         <div>
           <label htmlFor="guestCount" className="block text-sm font-semibold text-slate-200 mb-1">
-            Expected Guests <span className="text-rose-400" aria-hidden="true">*</span>
+            Expected Guests{' '}
+            <span className="text-rose-400" aria-hidden="true">
+              *
+            </span>
           </label>
           <input
             id="guestCount"
@@ -100,7 +102,10 @@ export function WizardStep2Budget({
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="sm:col-span-2">
           <label htmlFor="budgetAmount" className="block text-sm font-semibold text-slate-200 mb-1">
-            Total Budget <span className="text-rose-400" aria-hidden="true">*</span>
+            Total Budget{' '}
+            <span className="text-rose-400" aria-hidden="true">
+              *
+            </span>
           </label>
           <input
             id="budgetAmount"

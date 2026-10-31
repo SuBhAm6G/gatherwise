@@ -40,7 +40,11 @@ export function useWizardState(onPlanCreated: (brief: EventBrief) => void) {
   const [accessibilityRequirements, setAccessibilityRequirements] = useState<string[]>([])
   const [errors, setErrors] = useState<Record<string, string>>({})
 
-  const addTag = (val: string, setter: React.Dispatch<React.SetStateAction<string[]>>, clearSetter: () => void) => {
+  const addTag = (
+    val: string,
+    setter: React.Dispatch<React.SetStateAction<string[]>>,
+    clearSetter: () => void,
+  ) => {
     const trimmed = val.trim()
     if (trimmed) {
       setter((prev) => [...prev, trimmed])
@@ -80,7 +84,8 @@ export function useWizardState(onPlanCreated: (brief: EventBrief) => void) {
       return
     }
 
-    const currMeta = SUPPORTED_CURRENCIES.find((c) => c.code === currencyCode) ?? SUPPORTED_CURRENCIES[0]
+    const currMeta =
+      SUPPORTED_CURRENCIES.find((c) => c.code === currencyCode) ?? SUPPORTED_CURRENCIES[0]
     const precision = currMeta?.minorUnits ?? 2
     const parsedBudget = Math.round(parseFloat(budgetAmountMajor) * Math.pow(10, precision))
 

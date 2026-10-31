@@ -69,7 +69,9 @@ describe('Timeline Engine - Comprehensive Test Suite', () => {
     it('generates cleanup tasks with negative dueDaysBeforeEvent scheduled after event', () => {
       const communityBrief = { ...brief, eventType: 'community' as const }
       const tasks = generateTimeline(communityBrief)
-      const cleanupTask = tasks.find((t) => t.dueDaysBeforeEvent !== null && t.dueDaysBeforeEvent < 0)
+      const cleanupTask = tasks.find(
+        (t) => t.dueDaysBeforeEvent !== null && t.dueDaysBeforeEvent < 0,
+      )
       expect(cleanupTask).toBeDefined()
       if (cleanupTask && cleanupTask.dueDate && communityBrief.eventDate) {
         expect(cleanupTask.dueDate > communityBrief.eventDate).toBe(true)

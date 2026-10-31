@@ -1,15 +1,7 @@
 'use client'
 
-import React from 'react'
 import { PlanTask, TaskStatus } from '@/lib/domain/types'
-import {
-  Calendar,
-  CheckCircle2,
-  Trash2,
-  ChevronDown,
-  ChevronUp,
-  AlertCircle,
-} from 'lucide-react'
+import { Calendar, CheckCircle2, Trash2, ChevronDown, ChevronUp, AlertCircle } from 'lucide-react'
 
 interface TimelineTaskCardProps {
   task: PlanTask
@@ -38,8 +30,8 @@ export function TimelineTaskCard({
         task.isOverdue
           ? 'border-rose-500/30 bg-rose-950/20'
           : isCompleted
-          ? 'border-white/5 bg-slate-900/40 opacity-75'
-          : 'border-white/10 bg-slate-900/60 hover:border-white/20'
+            ? 'border-white/5 bg-slate-900/40 opacity-75'
+            : 'border-white/10 bg-slate-900/60 hover:border-white/20'
       }`}
     >
       <div className="p-4 sm:p-5 flex items-start sm:items-center justify-between gap-4">
@@ -60,7 +52,9 @@ export function TimelineTaskCard({
 
           <div className="min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className={`font-bold text-sm sm:text-base ${isCompleted ? 'line-through text-slate-400' : 'text-white'}`}>
+              <span
+                className={`font-bold text-sm sm:text-base ${isCompleted ? 'line-through text-slate-400' : 'text-white'}`}
+              >
                 {task.title}
               </span>
 
@@ -79,8 +73,8 @@ export function TimelineTaskCard({
                   task.priority === 'critical'
                     ? 'bg-rose-500/20 text-rose-300'
                     : task.priority === 'high'
-                    ? 'bg-amber-500/20 text-amber-300'
-                    : 'bg-indigo-500/20 text-indigo-300'
+                      ? 'bg-amber-500/20 text-amber-300'
+                      : 'bg-indigo-500/20 text-indigo-300'
                 }`}
               >
                 {task.priority}
@@ -92,7 +86,9 @@ export function TimelineTaskCard({
                 <Calendar className="w-3.5 h-3.5 text-indigo-400" aria-hidden="true" />
                 {task.dueDate ? `Due: ${task.dueDate}` : 'Date unscheduled'}
               </span>
-              {task.dueDaysBeforeEvent !== null && <span>({task.dueDaysBeforeEvent} days before event)</span>}
+              {task.dueDaysBeforeEvent !== null && (
+                <span>({task.dueDaysBeforeEvent} days before event)</span>
+              )}
               {task.origin === 'user' && (
                 <span className="text-2xs px-1.5 py-0.2 rounded bg-indigo-500/20 text-indigo-300">
                   Custom
@@ -107,11 +103,17 @@ export function TimelineTaskCard({
           <button
             type="button"
             onClick={onToggleExpand}
-            aria-label={isExpanded ? `Collapse milestone: ${task.title}` : `Expand milestone: ${task.title}`}
+            aria-label={
+              isExpanded ? `Collapse milestone: ${task.title}` : `Expand milestone: ${task.title}`
+            }
             aria-expanded={isExpanded}
             className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
           >
-            {isExpanded ? <ChevronUp className="w-4 h-4" aria-hidden="true" /> : <ChevronDown className="w-4 h-4" aria-hidden="true" />}
+            {isExpanded ? (
+              <ChevronUp className="w-4 h-4" aria-hidden="true" />
+            ) : (
+              <ChevronDown className="w-4 h-4" aria-hidden="true" />
+            )}
           </button>
           {task.origin === 'user' && (
             <button
@@ -145,7 +147,10 @@ export function TimelineTaskCard({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
             <div>
-              <label htmlFor={`status-${task.id}`} className="font-semibold text-slate-400 block mb-1">
+              <label
+                htmlFor={`status-${task.id}`}
+                className="font-semibold text-slate-400 block mb-1"
+              >
                 Status State:
               </label>
               <select
@@ -162,7 +167,10 @@ export function TimelineTaskCard({
             </div>
 
             <div>
-              <label htmlFor={`notes-${task.id}`} className="font-semibold text-slate-400 block mb-1">
+              <label
+                htmlFor={`notes-${task.id}`}
+                className="font-semibold text-slate-400 block mb-1"
+              >
                 Organizer Notes:
               </label>
               <input

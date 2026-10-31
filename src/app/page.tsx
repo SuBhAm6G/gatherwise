@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, type MouseEvent } from 'react'
 import { EventPlan, EventBrief, ChangeImpactReport } from '@/lib/domain/types'
 import { usePlan } from '@/lib/hooks/use-plan'
 import { Header } from '@/components/ui/Header'
@@ -9,7 +9,12 @@ import { ChangeImpactModal } from '@/components/impact/ChangeImpactModal'
 import { LandingHero } from '@/components/home/LandingHero'
 import { SavedPlansDrawer } from '@/components/home/SavedPlansDrawer'
 import { PlanTabContent } from '@/components/home/PlanTabContent'
-import { createPlanFromBrief, createDemoPlan, retrieveAllPlans, removePlan } from '@/lib/storage/plan-store'
+import {
+  createPlanFromBrief,
+  createDemoPlan,
+  retrieveAllPlans,
+  removePlan,
+} from '@/lib/storage/plan-store'
 
 export default function HomePage() {
   const [plansList, setPlansList] = useState<EventPlan[]>([])
@@ -43,7 +48,7 @@ export default function HomePage() {
     load()
   }, [plan])
 
-  const lastReportCount = React.useRef(0)
+  const lastReportCount = useRef(0)
   useEffect(() => {
     if (plan && plan.changeHistory.length > lastReportCount.current) {
       const latest = plan.changeHistory[plan.changeHistory.length - 1]
@@ -76,7 +81,7 @@ export default function HomePage() {
     setCurrentTab('overview')
   }
 
-  const handleDeletePlan = async (e: React.MouseEvent, id: string) => {
+  const handleDeletePlan = async (e: MouseEvent, id: string) => {
     e.stopPropagation()
     if (confirm('Are you sure you want to delete this event plan?')) {
       await removePlan(id)
@@ -105,10 +110,7 @@ export default function HomePage() {
       <main id="main-content" className="flex-1 p-4 sm:p-6 lg:p-8">
         {/* VIEW 1: CREATING NEW PLAN VIA WIZARD */}
         {isCreatingNew && (
-          <EventWizard
-            onPlanCreated={handlePlanCreated}
-            onCancel={() => setIsCreatingNew(false)}
-          />
+          <EventWizard onPlanCreated={handlePlanCreated} onCancel={() => setIsCreatingNew(false)} />
         )}
 
         {/* VIEW 2: ACTIVE PLAN TABS */}
@@ -149,10 +151,7 @@ export default function HomePage() {
         )}
       </main>
 
-      <ChangeImpactModal
-        report={activeImpactReport}
-        onClose={() => setActiveImpactReport(null)}
-      />
+      <ChangeImpactModal report={activeImpactReport} onClose={() => setActiveImpactReport(null)} />
     </div>
   )
 }

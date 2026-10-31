@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { TaskCategory, TaskPriority } from '@/lib/domain/types'
 
 interface TaskModalProps {
@@ -47,14 +47,24 @@ export function TaskModal({ isOpen, onClose, onAddTask }: TaskModalProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="add-task-title">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="add-task-title"
+    >
       <div className="w-full max-w-lg rounded-2xl border border-white/10 bg-slate-900 p-6 shadow-2xl space-y-4">
-        <h2 id="add-task-title" className="text-lg font-bold text-white">Add Custom Milestone Task</h2>
+        <h2 id="add-task-title" className="text-lg font-bold text-white">
+          Add Custom Milestone Task
+        </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4 text-xs">
           <div>
             <label htmlFor="taskTitle" className="font-semibold text-slate-300 block mb-1">
-              Task Title <span className="text-rose-400" aria-hidden="true">*</span>
+              Task Title{' '}
+              <span className="text-rose-400" aria-hidden="true">
+                *
+              </span>
             </label>
             <input
               id="taskTitle"

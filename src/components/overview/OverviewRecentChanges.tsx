@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { ChangeImpactReport } from '@/lib/domain/types'
 import { Clock } from 'lucide-react'
 
@@ -25,7 +24,10 @@ export function OverviewRecentChanges({ latestChange, onNavigateTab }: OverviewR
                 {latestChange.changeType.replace(/-/g, ' ')}
               </span>
               <span className="text-slate-500">
-                {new Date(latestChange.changedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                {new Date(latestChange.changedAt).toLocaleTimeString([], {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
               </span>
             </div>
             <p className="text-xs text-white leading-relaxed">{latestChange.summary}</p>
@@ -47,7 +49,8 @@ export function OverviewRecentChanges({ latestChange, onNavigateTab }: OverviewR
         </div>
       ) : (
         <div className="py-8 text-center text-slate-400 text-sm">
-          No modifications recorded yet. Any budget, date, or guest count adjustments will automatically recalculate dependencies here.
+          No modifications recorded yet. Any budget, date, or guest count adjustments will
+          automatically recalculate dependencies here.
         </div>
       )}
 

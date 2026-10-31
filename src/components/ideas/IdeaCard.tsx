@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { EventIdea } from '@/lib/domain/types'
 import { Bookmark, BookmarkCheck, Sparkles } from 'lucide-react'
 
@@ -28,14 +27,20 @@ export function IdeaCard({ idea, onToggleSaveIdea }: IdeaCardProps) {
           <button
             type="button"
             onClick={() => onToggleSaveIdea(idea)}
-            aria-label={isSaved ? `Unpin idea ${idea.title} from plan` : `Pin idea ${idea.title} to plan`}
+            aria-label={
+              isSaved ? `Unpin idea ${idea.title} from plan` : `Pin idea ${idea.title} to plan`
+            }
             className={`p-2 rounded-xl border transition-all ${
               isSaved
                 ? 'bg-indigo-500 text-white border-indigo-400 shadow-md shadow-indigo-500/30'
                 : 'bg-white/5 text-slate-400 border-white/10 hover:text-white hover:bg-white/10'
             }`}
           >
-            {isSaved ? <BookmarkCheck className="w-4 h-4" aria-hidden="true" /> : <Bookmark className="w-4 h-4" aria-hidden="true" />}
+            {isSaved ? (
+              <BookmarkCheck className="w-4 h-4" aria-hidden="true" />
+            ) : (
+              <Bookmark className="w-4 h-4" aria-hidden="true" />
+            )}
           </button>
         </div>
 
@@ -43,7 +48,9 @@ export function IdeaCard({ idea, onToggleSaveIdea }: IdeaCardProps) {
 
         {/* Why it fits callout */}
         <div className="p-3 rounded-xl bg-white/[0.03] border border-white/5 text-2xs text-indigo-300 mb-4">
-          <strong className="text-slate-300 font-semibold block mb-0.5">Why it fits your plan:</strong>
+          <strong className="text-slate-300 font-semibold block mb-0.5">
+            Why it fits your plan:
+          </strong>
           {idea.whyItFits}
         </div>
       </div>

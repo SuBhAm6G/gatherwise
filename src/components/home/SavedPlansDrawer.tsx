@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { EventPlan } from '@/lib/domain/types'
 import { formatCurrency } from '@/lib/engines/budget'
 import { FolderOpen, ArrowRight, Trash2 } from 'lucide-react'
@@ -11,18 +10,15 @@ interface SavedPlansDrawerProps {
   onDeletePlan: (e: React.MouseEvent, id: string) => void
 }
 
-export function SavedPlansDrawer({
-  plans,
-  onSelectPlan,
-  onDeletePlan,
-}: SavedPlansDrawerProps) {
+export function SavedPlansDrawer({ plans, onSelectPlan, onDeletePlan }: SavedPlansDrawerProps) {
   if (plans.length === 0) return null
 
   return (
     <section aria-label="Saved Event Plans" className="pt-6 space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-bold text-white flex items-center gap-2">
-          <FolderOpen className="w-5 h-5 text-indigo-400" aria-hidden="true" /> Saved Events ({plans.length})
+          <FolderOpen className="w-5 h-5 text-indigo-400" aria-hidden="true" /> Saved Events (
+          {plans.length})
         </h2>
       </div>
 
@@ -71,7 +67,10 @@ export function SavedPlansDrawer({
               >
                 <Trash2 className="w-4 h-4" aria-hidden="true" />
               </button>
-              <div className="p-2 rounded-xl text-slate-400 group-hover:text-indigo-400 group-hover:translate-x-1 transition-all" aria-hidden="true">
+              <div
+                className="p-2 rounded-xl text-slate-400 group-hover:text-indigo-400 group-hover:translate-x-1 transition-all"
+                aria-hidden="true"
+              >
                 <ArrowRight className="w-4 h-4" />
               </div>
             </div>

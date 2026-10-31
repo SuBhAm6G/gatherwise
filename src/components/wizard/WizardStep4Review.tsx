@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { Sparkles } from 'lucide-react'
 
 interface WizardStep4ReviewProps {
@@ -33,7 +32,10 @@ export function WizardStep4Review({
   return (
     <section aria-labelledby="step4-heading" className="space-y-6">
       <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3 text-sm">
-        <h2 id="step4-heading" className="text-base font-bold text-white mb-2 flex items-center gap-2">
+        <h2
+          id="step4-heading"
+          className="text-base font-bold text-white mb-2 flex items-center gap-2"
+        >
           <Sparkles className="w-4 h-4 text-pink-400" aria-hidden="true" /> Plan Summary Preview
         </h2>
 
@@ -48,7 +50,9 @@ export function WizardStep4Review({
           </div>
           <div>
             <span className="text-xs text-slate-500 block">Date</span>
-            <span className="font-semibold text-white">{hasNoDateYet || !eventDate ? 'Date unconfirmed' : eventDate}</span>
+            <span className="font-semibold text-white">
+              {hasNoDateYet || !eventDate ? 'Date unconfirmed' : eventDate}
+            </span>
           </div>
           <div>
             <span className="text-xs text-slate-500 block">Guests</span>
@@ -76,12 +80,18 @@ export function WizardStep4Review({
         {(accessibilityRequirements.length > 0 || dietaryRequirements.length > 0) && (
           <div className="pt-2 border-t border-white/5 flex flex-wrap gap-2">
             {accessibilityRequirements.map((r, i) => (
-              <span key={i} className="text-xs px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+              <span
+                key={i}
+                className="text-xs px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30"
+              >
                 ♿ {r}
               </span>
             ))}
             {dietaryRequirements.map((d, i) => (
-              <span key={i} className="text-xs px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+              <span
+                key={i}
+                className="text-xs px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
+              >
                 🌱 {d}
               </span>
             ))}
@@ -90,7 +100,9 @@ export function WizardStep4Review({
       </div>
 
       <div className="p-4 rounded-xl bg-indigo-950/40 border border-indigo-500/30 text-xs text-indigo-200 leading-relaxed">
-        Upon creation, GatherWise will calculate deterministic budget allocations across key categories, build a timeline with due dates relative to your event date, and generate essential vendor checklists.
+        Upon creation, GatherWise will calculate deterministic budget allocations across key
+        categories, build a timeline with due dates relative to your event date, and generate
+        essential vendor checklists.
       </div>
     </section>
   )

@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { Sparkles, CheckCircle2, RefreshCw, AlertCircle, PlusCircle, ArrowLeft } from 'lucide-react'
 import { SaveStatus } from '@/lib/hooks/use-plan'
 
@@ -115,7 +114,10 @@ export function Header({
 
         {/* Navigation Tabs (if plan is active) */}
         {eventName && (
-          <nav aria-label="Event sections" className="flex space-x-1 sm:space-x-2 overflow-x-auto py-1 scrollbar-none">
+          <nav
+            aria-label="Event sections"
+            className="flex space-x-1 sm:space-x-2 overflow-x-auto py-1 scrollbar-none"
+          >
             {tabs.map((tab) => {
               const isActive = currentTab === tab.id
               return (

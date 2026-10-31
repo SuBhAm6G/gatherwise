@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { EventPlan, EventIdea, TaskStatus, VendorStatus } from '@/lib/domain/types'
 import { OverviewDashboard } from '@/components/overview/OverviewDashboard'
 import { BudgetEditor } from '@/components/budget/BudgetEditor'
@@ -19,7 +18,9 @@ interface PlanTabContentProps {
   onChangeTotalBudget: (newBudget: number) => void
   onUpdateTaskStatus: (taskId: string, status: TaskStatus) => void
   onUpdateTaskNotes: (taskId: string, notes: string) => void
-  onAddTask: (task: Parameters<React.ComponentProps<typeof TimelineManager>['onAddTask']>[0]) => void
+  onAddTask: (
+    task: Parameters<React.ComponentProps<typeof TimelineManager>['onAddTask']>[0],
+  ) => void
   onDeleteTask: (taskId: string) => void
   onSetVendorStatus: (vendorId: string, status: VendorStatus) => void
   onSetVendorQuote: (vendorId: string, quote: number | null) => void

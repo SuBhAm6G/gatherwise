@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { BudgetCategory } from '@/lib/domain/types'
 import { formatCurrency } from '@/lib/engines/budget'
 import { ShieldCheck } from 'lucide-react'
@@ -51,7 +50,8 @@ export function BudgetCategoryRow({
           <div className="flex justify-between text-xs">
             <span className="text-slate-400">Target Allocation</span>
             <span className="font-bold text-indigo-300">
-              {cat.allocationPercent}% ({formatCurrency(cat.allocatedAmount, currencyCode, precision)})
+              {cat.allocationPercent}% (
+              {formatCurrency(cat.allocatedAmount, currencyCode, precision)})
             </span>
           </div>
           <label htmlFor={`slider-${cat.id}`} className="sr-only">
@@ -80,7 +80,9 @@ export function BudgetCategoryRow({
               type="number"
               min="0"
               step="1"
-              value={cat.actualSpend > 0 ? (cat.actualSpend / Math.pow(10, precision)).toString() : ''}
+              value={
+                cat.actualSpend > 0 ? (cat.actualSpend / Math.pow(10, precision)).toString() : ''
+              }
               onChange={(e) => {
                 const val = parseFloat(e.target.value || '0')
                 onUpdateActualSpend(

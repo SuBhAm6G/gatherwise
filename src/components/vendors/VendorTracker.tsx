@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { VendorCategory, VendorStatus } from '@/lib/domain/types'
 import { VendorHeader } from './VendorHeader'
 import { VendorCategoryCard } from './VendorCategoryCard'

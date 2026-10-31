@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { EventPlan, AssistantMessage } from '@/lib/domain/types'
 import { getOfflineFallbackResponse } from '@/lib/ai/fallback'
 import { Sparkles, RefreshCw, ShieldCheck, Bot } from 'lucide-react'
@@ -43,7 +43,9 @@ function createInitialAssistantMessage(plan: EventPlan): AssistantMessage {
 }
 
 export function AssistantPanel({ plan }: AssistantPanelProps) {
-  const [messages, setMessages] = useState<AssistantMessage[]>([createInitialAssistantMessage(plan)])
+  const [messages, setMessages] = useState<AssistantMessage[]>([
+    createInitialAssistantMessage(plan),
+  ])
   const [inputQuestion, setInputQuestion] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const chatBottomRef = useRef<HTMLDivElement>(null)
@@ -111,8 +113,7 @@ export function AssistantPanel({ plan }: AssistantPanelProps) {
       }
 
       throw new Error('Invalid format returned from assistant API')
-    } catch (err: unknown) {
-      console.warn('[GatherWise] AI Assistant unavailable, using offline fallback:', err)
+    } catch {
       const fallback = getOfflineFallbackResponse(plan, question)
       const assistantMsg: AssistantMessage = {
         id: uuidv4(),
@@ -132,16 +133,26 @@ export function AssistantPanel({ plan }: AssistantPanelProps) {
   }
 
   return (
-    <section aria-label="AI Event Planning Assistant" className="flex flex-col h-[750px] max-w-5xl mx-auto rounded-3xl border border-white/10 bg-slate-900/60 backdrop-blur-xl overflow-hidden shadow-2xl">
+    <section
+      aria-label="AI Event Planning Assistant"
+      className="flex flex-col h-[750px] max-w-5xl mx-auto rounded-3xl border border-white/10 bg-slate-900/60 backdrop-blur-xl overflow-hidden shadow-2xl"
+    >
       {/* Header */}
       <header className="px-6 py-4 border-b border-white/10 flex items-center justify-between bg-slate-900/80">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-pink-500 flex items-center justify-center text-white shadow-lg shadow-indigo-500/25" aria-hidden="true">
+          <div
+            className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-pink-500 flex items-center justify-center text-white shadow-lg shadow-indigo-500/25"
+            aria-hidden="true"
+          >
             <Sparkles className="w-5 h-5" />
           </div>
           <div>
-            <h1 className="font-extrabold text-sm sm:text-base text-white">Event Planning Assistant</h1>
-            <p className="text-2xs text-slate-400">Grounded in your live budget, tasks, and vendor pipeline</p>
+            <h1 className="font-extrabold text-sm sm:text-base text-white">
+              Event Planning Assistant
+            </h1>
+            <p className="text-2xs text-slate-400">
+              Grounded in your live budget, tasks, and vendor pipeline
+            </p>
           </div>
         </div>
 
@@ -163,7 +174,10 @@ export function AssistantPanel({ plan }: AssistantPanelProps) {
 
         {isLoading && (
           <div className="flex gap-3 justify-start" aria-live="polite">
-            <div className="w-8 h-8 rounded-xl bg-indigo-600/30 border border-indigo-500/30 flex items-center justify-center text-indigo-300 shrink-0" aria-hidden="true">
+            <div
+              className="w-8 h-8 rounded-xl bg-indigo-600/30 border border-indigo-500/30 flex items-center justify-center text-indigo-300 shrink-0"
+              aria-hidden="true"
+            >
               <Bot className="w-4 h-4" />
             </div>
             <div className="p-4 rounded-2xl bg-white/5 border border-white/10 text-xs text-slate-400 flex items-center gap-2">

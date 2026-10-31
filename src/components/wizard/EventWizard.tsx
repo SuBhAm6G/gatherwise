@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { EventBrief } from '@/lib/domain/types'
 import { WizardStepHeader } from './WizardStepHeader'
 import { WizardStep1General } from './WizardStep1General'

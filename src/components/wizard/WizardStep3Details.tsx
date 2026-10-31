@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { VenuePreference, DiyPreference, AudienceAgeGroup } from '@/lib/domain/types'
 import { WizardTagInput } from './WizardTagInput'
 import { WizardStep3Preferences } from './WizardStep3Preferences'
@@ -32,7 +31,11 @@ interface WizardStep3DetailsProps {
   setConstraintsInput: (s: string) => void
   importantConstraints: string[]
   setImportantConstraints: React.Dispatch<React.SetStateAction<string[]>>
-  addTag: (val: string, setter: React.Dispatch<React.SetStateAction<string[]>>, clearSetter: () => void) => void
+  addTag: (
+    val: string,
+    setter: React.Dispatch<React.SetStateAction<string[]>>,
+    clearSetter: () => void,
+  ) => void
   removeTag: (index: number, setter: React.Dispatch<React.SetStateAction<string[]>>) => void
 }
 
@@ -122,7 +125,11 @@ export function WizardStep3Details({
           value={accessibilityInput}
           onChange={setAccessibilityInput}
           tags={accessibilityRequirements}
-          onAdd={() => addTag(accessibilityInput, setAccessibilityRequirements, () => setAccessibilityInput(''))}
+          onAdd={() =>
+            addTag(accessibilityInput, setAccessibilityRequirements, () =>
+              setAccessibilityInput(''),
+            )
+          }
           onRemove={(idx) => removeTag(idx, setAccessibilityRequirements)}
           colorScheme="indigo"
         />
@@ -158,7 +165,9 @@ export function WizardStep3Details({
           value={constraintsInput}
           onChange={setConstraintsInput}
           tags={importantConstraints}
-          onAdd={() => addTag(constraintsInput, setImportantConstraints, () => setConstraintsInput(''))}
+          onAdd={() =>
+            addTag(constraintsInput, setImportantConstraints, () => setConstraintsInput(''))
+          }
           onRemove={(idx) => removeTag(idx, setImportantConstraints)}
           colorScheme="rose"
         />

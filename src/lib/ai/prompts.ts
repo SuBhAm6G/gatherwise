@@ -9,7 +9,11 @@ import { AI_CONFIG } from './provider'
  */
 export function buildIdeasContext(brief: EventBrief, budget: BudgetPlan): string {
   const budgetStr = formatCurrency(budget.totalBudget, brief.currencyCode, brief.currencyMinorUnits)
-  const remainingStr = formatCurrency(budget.remaining, brief.currencyCode, brief.currencyMinorUnits)
+  const remainingStr = formatCurrency(
+    budget.remaining,
+    brief.currencyCode,
+    brief.currencyMinorUnits,
+  )
 
   const lines = [
     `Event type: ${brief.eventType}`,
@@ -22,9 +26,13 @@ export function buildIdeasContext(brief: EventBrief, budget: BudgetPlan): string
     `DIY preference: ${brief.diyPreference}`,
     `Age group: ${brief.audienceAgeGroup}`,
     brief.primaryGoals.length > 0 ? `Goals: ${brief.primaryGoals.join(', ')}` : '',
-    brief.importantConstraints.length > 0 ? `Constraints: ${brief.importantConstraints.join(', ')}` : '',
+    brief.importantConstraints.length > 0
+      ? `Constraints: ${brief.importantConstraints.join(', ')}`
+      : '',
     brief.dietaryRequirements.length > 0 ? `Dietary: ${brief.dietaryRequirements.join(', ')}` : '',
-    brief.accessibilityRequirements.length > 0 ? `Accessibility: ${brief.accessibilityRequirements.join(', ')}` : '',
+    brief.accessibilityRequirements.length > 0
+      ? `Accessibility: ${brief.accessibilityRequirements.join(', ')}`
+      : '',
     brief.mustHaveItems.length > 0 ? `Must-have: ${brief.mustHaveItems.join(', ')}` : '',
     brief.mustAvoidItems.length > 0 ? `Must-avoid: ${brief.mustAvoidItems.join(', ')}` : '',
   ]
@@ -43,7 +51,11 @@ export function buildAssistantContext(
   vendors: VendorCategory[],
 ): string {
   const budgetStr = formatCurrency(budget.totalBudget, brief.currencyCode, brief.currencyMinorUnits)
-  const remainingStr = formatCurrency(budget.remaining, brief.currencyCode, brief.currencyMinorUnits)
+  const remainingStr = formatCurrency(
+    budget.remaining,
+    brief.currencyCode,
+    brief.currencyMinorUnits,
+  )
   const overdue = getOverdueTasks(tasks)
   const upcoming = getUpcomingTasks(tasks, 14)
   const bookedVendors = vendors.filter((v) => v.status === 'booked').map((v) => v.name)
@@ -55,15 +67,31 @@ export function buildAssistantContext(
 
   const lines = [
     `Event: ${brief.eventName} (${brief.eventType})`,
-    brief.eventDate ? `Event date: ${brief.eventDate} (${daysLeft ?? '?'} days away)` : 'Event date: not set',
+    brief.eventDate
+      ? `Event date: ${brief.eventDate} (${daysLeft ?? '?'} days away)`
+      : 'Event date: not set',
     `Guests: ${brief.guestCount}`,
     `Budget: ${budgetStr}, Remaining: ${remainingStr}${budget.isOverBudget ? ' [OVER BUDGET]' : ''}`,
-    overdue.length > 0 ? `Overdue tasks (${overdue.length}): ${overdue.slice(0, 5).map((t) => t.title).join(', ')}` : 'No overdue tasks',
-    upcoming.length > 0 ? `Upcoming tasks (next 14 days): ${upcoming.slice(0, 5).map((t) => `${t.title} (due ${t.dueDate})`).join(', ')}` : 'No upcoming tasks in 14 days',
-    bookedVendors.length > 0 ? `Booked vendors: ${bookedVendors.join(', ')}` : 'No vendors booked yet',
+    overdue.length > 0
+      ? `Overdue tasks (${overdue.length}): ${overdue
+          .slice(0, 5)
+          .map((t) => t.title)
+          .join(', ')}`
+      : 'No overdue tasks',
+    upcoming.length > 0
+      ? `Upcoming tasks (next 14 days): ${upcoming
+          .slice(0, 5)
+          .map((t) => `${t.title} (due ${t.dueDate})`)
+          .join(', ')}`
+      : 'No upcoming tasks in 14 days',
+    bookedVendors.length > 0
+      ? `Booked vendors: ${bookedVendors.join(', ')}`
+      : 'No vendors booked yet',
     pendingVendors.length > 0 ? `Essential vendors not started: ${pendingVendors.join(', ')}` : '',
     brief.primaryGoals.length > 0 ? `Goals: ${brief.primaryGoals.join(', ')}` : '',
-    brief.importantConstraints.length > 0 ? `Constraints: ${brief.importantConstraints.join(', ')}` : '',
+    brief.importantConstraints.length > 0
+      ? `Constraints: ${brief.importantConstraints.join(', ')}`
+      : '',
   ]
 
   return lines.filter(Boolean).join('\n').slice(0, AI_CONFIG.maxPlanContextChars)

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { PlanTask, TaskCategory, TaskPriority, TaskStatus } from '@/lib/domain/types'
 import { TimelineToolbar } from './TimelineToolbar'
 import { TimelineTaskCard } from './TimelineTaskCard'
@@ -38,7 +38,8 @@ export function TimelineManager({
   const filteredTasks = tasks.filter((t) => {
     if (filter === 'overdue' && !t.isOverdue) return false
     if (filter === 'completed' && t.status !== 'completed') return false
-    if (filter === 'upcoming' && (t.status === 'completed' || t.isOverdue || !t.dueDate)) return false
+    if (filter === 'upcoming' && (t.status === 'completed' || t.isOverdue || !t.dueDate))
+      return false
     if (categoryFilter !== 'all' && t.category !== categoryFilter) return false
     return true
   })

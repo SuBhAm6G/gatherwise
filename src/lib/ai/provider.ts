@@ -9,7 +9,7 @@ export function getGeminiProvider() {
   if (!apiKey) {
     throw new Error(
       'GEMINI_API_KEY is not configured. ' +
-      'Copy .env.example to .env.local and add your key from https://aistudio.google.com/'
+        'Copy .env.example to .env.local and add your key from https://aistudio.google.com/',
     )
   }
   return createGoogleGenerativeAI({ apiKey })

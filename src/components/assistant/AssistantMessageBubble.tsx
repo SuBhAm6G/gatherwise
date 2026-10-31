@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { AssistantMessage } from '@/lib/domain/types'
 import { Bot, User, Lightbulb, ArrowRight } from 'lucide-react'
 
@@ -13,9 +12,15 @@ export function AssistantMessageBubble({ msg, onSelectAction }: AssistantMessage
   const isUser = msg.role === 'user'
 
   return (
-    <article className={`flex gap-3 ${isUser ? 'justify-end' : 'justify-start'}`} aria-label={isUser ? 'User message' : 'Assistant message'}>
+    <article
+      className={`flex gap-3 ${isUser ? 'justify-end' : 'justify-start'}`}
+      aria-label={isUser ? 'User message' : 'Assistant message'}
+    >
       {!isUser && (
-        <div className="w-8 h-8 rounded-xl bg-indigo-600/30 border border-indigo-500/30 flex items-center justify-center text-indigo-300 shrink-0 mt-1" aria-hidden="true">
+        <div
+          className="w-8 h-8 rounded-xl bg-indigo-600/30 border border-indigo-500/30 flex items-center justify-center text-indigo-300 shrink-0 mt-1"
+          aria-hidden="true"
+        >
           <Bot className="w-4 h-4" />
         </div>
       )}
@@ -74,7 +79,10 @@ export function AssistantMessageBubble({ msg, onSelectAction }: AssistantMessage
       </div>
 
       {isUser && (
-        <div className="w-8 h-8 rounded-xl bg-slate-800 border border-white/10 flex items-center justify-center text-slate-300 shrink-0 mt-1" aria-hidden="true">
+        <div
+          className="w-8 h-8 rounded-xl bg-slate-800 border border-white/10 flex items-center justify-center text-slate-300 shrink-0 mt-1"
+          aria-hidden="true"
+        >
           <User className="w-4 h-4" />
         </div>
       )}

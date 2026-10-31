@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { generateObject } from 'ai'
 import { z } from 'zod'
-import { getGeminiProvider, GEMINI_MODEL, FALLBACK_GEMINI_MODEL, AI_CONFIG } from '@/lib/ai/provider'
+import {
+  getGeminiProvider,
+  GEMINI_MODEL,
+  FALLBACK_GEMINI_MODEL,
+  AI_CONFIG,
+} from '@/lib/ai/provider'
 import { AIIdeasResponseSchema, parseIdeasResponse } from '@/lib/ai/schemas'
 import { IDEAS_SYSTEM_PROMPT, buildIdeasContext } from '@/lib/ai/prompts'
 import { EventBriefSchema, BudgetPlanSchema } from '@/lib/domain/schemas'
@@ -50,8 +55,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     let result
     try {
       result = await callModel(GEMINI_MODEL)
-    } catch (primaryErr) {
-      console.warn(`[GatherWise] Model ${GEMINI_MODEL} failed in ideas, attempting ${FALLBACK_GEMINI_MODEL}:`, primaryErr)
+    } catch {
+      console.warn('[GatherWise] Primary model call failed in ideas, attempting fallback')
       result = await callModel(FALLBACK_GEMINI_MODEL)
     }
 
@@ -71,7 +76,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       )
     }
 
-    console.error('[GatherWise] Ideas API error:', message)
+    console.error('[GatherWise] Ideas API invocation error')
     return NextResponse.json(
       { error: 'AI service temporarily unavailable', code: 'AI_ERROR' },
       { status: 503 },

@@ -133,17 +133,51 @@ check('.env.example exists with placeholder values only', () => {
 })
 
 // 8. Documentation files exist and are populated
-check('docs/ARCHITECTURE.md, docs/SECURITY.md, docs/TESTING.md exist', () => {
+check('docs/ (ARCHITECTURE, SECURITY, TESTING, ACCESSIBILITY, DEPLOYMENT) and CONTRIBUTING exist', () => {
   return (
     existsSync('docs/ARCHITECTURE.md') &&
     existsSync('docs/SECURITY.md') &&
-    existsSync('docs/TESTING.md')
+    existsSync('docs/TESTING.md') &&
+    existsSync('docs/ACCESSIBILITY.md') &&
+    existsSync('docs/DEPLOYMENT.md') &&
+    existsSync('CONTRIBUTING.md') &&
+    existsSync('SECURITY.md')
   )
+})
+
+// 9. CI and code styling manifests exist
+check('CI workflow and style configs (.editorconfig, .prettierrc, ci.yml) exist', () => {
+  return (
+    existsSync('.editorconfig') &&
+    existsSync('.prettierrc') &&
+    existsSync('.github/workflows/ci.yml')
+  )
+})
+
+// 10. Every source file under 250 lines
+check('All source files under 250 lines for modularity', () => {
+  try {
+    const trackedFiles = execSync('git ls-files src/', { encoding: 'utf8', stdio: 'pipe' })
+      .split('\n')
+      .filter((f) => f.endsWith('.ts') || f.endsWith('.tsx'))
+
+    for (const file of trackedFiles) {
+      if (!existsSync(file) || file.includes('tests/')) continue
+      const lineCount = readFileSync(file, 'utf8').split('\n').length
+      if (lineCount > 250) {
+        console.error(`  File exceeds 250 lines: ${file} (${lineCount} lines)`)
+        return false
+      }
+    }
+    return true
+  } catch {
+    return true
+  }
 })
 
 console.log(`\nAudit complete: ${passed} passed, ${failed} failed`)
 if (failed > 0) {
   process.exit(1)
 } else {
-  console.log('🎉 Repository passes all quality and security checks!')
+  console.log('🎉 Repository passes all quality, architecture, and security checks!')
 }

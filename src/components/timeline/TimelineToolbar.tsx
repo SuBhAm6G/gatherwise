@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { Plus, AlertTriangle, Filter } from 'lucide-react'
 
 interface TimelineToolbarProps {
@@ -30,7 +29,9 @@ export function TimelineToolbar({
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white">Event Timeline & Action Milestones</h1>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white">
+            Event Timeline & Action Milestones
+          </h1>
           <p className="text-xs sm:text-sm text-slate-400 mt-1">
             Deterministic deadline schedules based on vendor lead times and your event date.
           </p>
@@ -46,15 +47,24 @@ export function TimelineToolbar({
         </button>
       </div>
 
-      <nav aria-label="Task filters" className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl border border-white/10 bg-slate-900/60 backdrop-blur-xl">
-        <div className="flex flex-wrap items-center gap-1.5" role="tablist" aria-label="Filter tasks by status">
+      <nav
+        aria-label="Task filters"
+        className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl border border-white/10 bg-slate-900/60 backdrop-blur-xl"
+      >
+        <div
+          className="flex flex-wrap items-center gap-1.5"
+          role="tablist"
+          aria-label="Filter tasks by status"
+        >
           <button
             type="button"
             role="tab"
             aria-selected={filter === 'all'}
             onClick={() => setFilter('all')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-              filter === 'all' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white hover:bg-white/5'
+              filter === 'all'
+                ? 'bg-indigo-600 text-white'
+                : 'text-slate-400 hover:text-white hover:bg-white/5'
             }`}
           >
             All ({totalCount})
@@ -77,7 +87,9 @@ export function TimelineToolbar({
             aria-selected={filter === 'upcoming'}
             onClick={() => setFilter('upcoming')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-              filter === 'upcoming' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white hover:bg-white/5'
+              filter === 'upcoming'
+                ? 'bg-indigo-600 text-white'
+                : 'text-slate-400 hover:text-white hover:bg-white/5'
             }`}
           >
             Upcoming Active
@@ -88,7 +100,9 @@ export function TimelineToolbar({
             aria-selected={filter === 'completed'}
             onClick={() => setFilter('completed')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-              filter === 'completed' ? 'bg-emerald-600 text-white' : 'text-slate-400 hover:text-white hover:bg-white/5'
+              filter === 'completed'
+                ? 'bg-emerald-600 text-white'
+                : 'text-slate-400 hover:text-white hover:bg-white/5'
             }`}
           >
             Completed ({completedCount})
@@ -97,7 +111,9 @@ export function TimelineToolbar({
 
         <div className="flex items-center gap-2">
           <Filter className="w-3.5 h-3.5 text-slate-400" aria-hidden="true" />
-          <label htmlFor="categoryFilter" className="sr-only">Filter by category</label>
+          <label htmlFor="categoryFilter" className="sr-only">
+            Filter by category
+          </label>
           <select
             id="categoryFilter"
             value={categoryFilter}

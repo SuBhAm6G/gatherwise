@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  verify:
+    name: Typecheck, Lint, Format & Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Code format verification
+        run: npm run format:check
+
+      - name: Strict type check
+        run: npm run typecheck
+
+      - name: ESLint code quality gate
+        run: npm run lint
+
+      - name: Run unit test suite
+        run: npm test
+
+      - name: Production build verification
+        run: npm run build
+

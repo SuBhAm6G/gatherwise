@@ -54,7 +54,10 @@ describe('Vendor Engine - Comprehensive Test Suite', () => {
     it('generates birthday-specific vendors with cake and entertainment', () => {
       const bdayVendors = generateVendors({ ...brief, eventType: 'birthday' })
       expect(bdayVendors.length).toBeGreaterThan(0)
-      const entertainment = bdayVendors.find((v) => v.name.toLowerCase().includes('entertainment') || v.name.toLowerCase().includes('music'))
+      const entertainment = bdayVendors.find(
+        (v) =>
+          v.name.toLowerCase().includes('entertainment') || v.name.toLowerCase().includes('music'),
+      )
       expect(entertainment).toBeDefined()
     })
 

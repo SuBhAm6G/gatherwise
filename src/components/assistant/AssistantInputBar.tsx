@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { Send } from 'lucide-react'
 
 interface AssistantInputBarProps {
@@ -25,7 +24,9 @@ export function AssistantInputBar({
         }}
         className="flex items-center gap-3"
       >
-        <label htmlFor="assistant-input-field" className="sr-only">Ask question or advice</label>
+        <label htmlFor="assistant-input-field" className="sr-only">
+          Ask question or advice
+        </label>
         <input
           id="assistant-input-field"
           type="text"
@@ -47,7 +48,8 @@ export function AssistantInputBar({
       </form>
 
       <p className="text-2xs text-slate-500 text-center mt-2">
-        AI responses are advisory recommendations grounded in your plan. Verify contracts, permits, and financial terms directly.
+        AI responses are advisory recommendations grounded in your plan. Verify contracts, permits,
+        and financial terms directly.
       </p>
     </footer>
   )

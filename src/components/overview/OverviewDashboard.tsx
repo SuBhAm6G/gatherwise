@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { EventPlan } from '@/lib/domain/types'
 import { daysUntilEvent, getOverdueTasks, getUpcomingTasks } from '@/lib/engines/timeline'
 import { AlertTriangle } from 'lucide-react'
@@ -52,10 +51,12 @@ export function OverviewDashboard({ plan, onNavigateTab, onCompleteTask }: Overv
             </div>
             <div>
               <h2 id="overdue-alert-heading" className="font-bold text-sm sm:text-base text-white">
-                {overdueTasks.length} task{overdueTasks.length > 1 ? 's' : ''} require immediate attention!
+                {overdueTasks.length} task{overdueTasks.length > 1 ? 's' : ''} require immediate
+                attention!
               </h2>
               <p className="text-xs text-rose-300 mt-0.5">
-                Milestones past their recommended timeline may jeopardize bookings or supply delivery.
+                Milestones past their recommended timeline may jeopardize bookings or supply
+                delivery.
               </p>
             </div>
           </div>
@@ -90,10 +91,7 @@ export function OverviewDashboard({ plan, onNavigateTab, onCompleteTask }: Overv
           onNavigateTab={onNavigateTab}
           onCompleteTask={onCompleteTask}
         />
-        <OverviewRecentChanges
-          latestChange={latestChange ?? null}
-          onNavigateTab={onNavigateTab}
-        />
+        <OverviewRecentChanges latestChange={latestChange ?? null} onNavigateTab={onNavigateTab} />
       </div>
     </div>
   )

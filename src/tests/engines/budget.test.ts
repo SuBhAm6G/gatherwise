@@ -157,18 +157,24 @@ describe('Budget Engine - Robust Comprehensive Suite', () => {
     it('throws RangeError for negative allocation percentages', () => {
       const budget = generateBudget(sampleBrief)
       const categoryId = budget.categories[0]!.id
-      expect(() => adjustCategoryAllocation(budget, sampleBrief, categoryId, -5)).toThrow(RangeError)
+      expect(() => adjustCategoryAllocation(budget, sampleBrief, categoryId, -5)).toThrow(
+        RangeError,
+      )
     })
 
     it('throws RangeError for allocation percentages exceeding 100', () => {
       const budget = generateBudget(sampleBrief)
       const categoryId = budget.categories[0]!.id
-      expect(() => adjustCategoryAllocation(budget, sampleBrief, categoryId, 105)).toThrow(RangeError)
+      expect(() => adjustCategoryAllocation(budget, sampleBrief, categoryId, 105)).toThrow(
+        RangeError,
+      )
     })
 
     it('throws Error for non-existent category ID', () => {
       const budget = generateBudget(sampleBrief)
-      expect(() => adjustCategoryAllocation(budget, sampleBrief, 'non-existent-id', 20)).toThrow('not found')
+      expect(() => adjustCategoryAllocation(budget, sampleBrief, 'non-existent-id', 20)).toThrow(
+        'not found',
+      )
     })
 
     it('recalculateBudget updates all categories with new total budget', () => {

@@ -116,7 +116,10 @@ describe('Offline Fallback Engine - Comprehensive Test Suite', () => {
 
     it('returns helpful summary for unrecognized queries', () => {
       const plan = createPlanFromBrief(brief)
-      const response = getOfflineFallbackResponse(plan, 'Can you tell me a funny joke about banjos?')
+      const response = getOfflineFallbackResponse(
+        plan,
+        'Can you tell me a funny joke about banjos?',
+      )
 
       expect(response.isOfflineFallback).toBe(true)
       expect(response.answer).toContain(brief.eventName)

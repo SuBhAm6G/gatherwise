@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { VendorCategory, VendorStatus } from '@/lib/domain/types'
 import { CheckCircle2, ChevronDown, ChevronUp } from 'lucide-react'
 import { VendorChecklistDrawer } from './VendorChecklistDrawer'
@@ -56,8 +55,8 @@ export function VendorCategoryCard({
                 vendor.essentiality === 'essential'
                   ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
                   : vendor.essentiality === 'conditional'
-                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                  : 'bg-slate-500/20 text-slate-300 border border-slate-500/30'
+                    ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                    : 'bg-slate-500/20 text-slate-300 border border-slate-500/30'
               }`}
             >
               {vendor.essentiality}
@@ -75,7 +74,9 @@ export function VendorCategoryCard({
         <div className="lg:w-1/3">
           <div className="flex items-center justify-between text-2xs text-slate-400 mb-1.5 font-medium">
             <span>Status Pipeline</span>
-            <span className="capitalize text-indigo-300 font-semibold">{vendor.status.replace('-', ' ')}</span>
+            <span className="capitalize text-indigo-300 font-semibold">
+              {vendor.status.replace('-', ' ')}
+            </span>
           </div>
           <nav aria-label={`Status stages for ${vendor.name}`} className="flex items-center gap-1">
             {STATUS_STAGES.map((st, idx) => {
@@ -130,21 +131,26 @@ export function VendorCategoryCard({
           <button
             type="button"
             onClick={onToggleExpand}
-            aria-label={isExpanded ? `Collapse checklist for ${vendor.name}` : `Expand checklist for ${vendor.name}`}
+            aria-label={
+              isExpanded
+                ? `Collapse checklist for ${vendor.name}`
+                : `Expand checklist for ${vendor.name}`
+            }
             className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition-colors flex items-center gap-1 text-xs font-semibold"
           >
             <span>Checklist</span>
-            {isExpanded ? <ChevronUp className="w-4 h-4" aria-hidden="true" /> : <ChevronDown className="w-4 h-4" aria-hidden="true" />}
+            {isExpanded ? (
+              <ChevronUp className="w-4 h-4" aria-hidden="true" />
+            ) : (
+              <ChevronDown className="w-4 h-4" aria-hidden="true" />
+            )}
           </button>
         </div>
       </div>
 
       {/* Expanded Checklist Details */}
       {isExpanded && (
-        <VendorChecklistDrawer
-          vendor={vendor}
-          onUpdateVendorNotes={onUpdateVendorNotes}
-        />
+        <VendorChecklistDrawer vendor={vendor} onUpdateVendorNotes={onUpdateVendorNotes} />
       )}
     </article>
   )

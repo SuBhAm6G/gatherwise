@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { BudgetPlan } from '@/lib/domain/types'
 import { formatCurrency } from '@/lib/engines/budget'
 
@@ -12,8 +11,13 @@ interface BudgetMetricsCardsProps {
 
 export function BudgetMetricsCards({ budget, currencyCode, precision }: BudgetMetricsCardsProps) {
   return (
-    <section aria-labelledby="budget-summary-heading" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-      <h2 id="budget-summary-heading" className="sr-only">Budget Summary Metrics</h2>
+    <section
+      aria-labelledby="budget-summary-heading"
+      className="grid grid-cols-2 lg:grid-cols-4 gap-4"
+    >
+      <h2 id="budget-summary-heading" className="sr-only">
+        Budget Summary Metrics
+      </h2>
 
       <article className="rounded-2xl border border-white/10 bg-slate-900/60 p-4 backdrop-blur-xl">
         <span className="text-xs font-semibold text-slate-400 block mb-1">Total Budget</span>

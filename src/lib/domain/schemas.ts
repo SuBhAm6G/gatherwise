@@ -99,7 +99,13 @@ export const TaskCategorySchema = z.enum([
 
 export const TaskPrioritySchema = z.enum(['critical', 'high', 'medium', 'low'])
 export const TaskOriginSchema = z.enum(['template', 'ai', 'user'])
-export const TaskStatusSchema = z.enum(['pending', 'in-progress', 'completed', 'blocked', 'skipped'])
+export const TaskStatusSchema = z.enum([
+  'pending',
+  'in-progress',
+  'completed',
+  'blocked',
+  'skipped',
+])
 
 export const PlanTaskSchema = z.object({
   id: z.string().uuid(),

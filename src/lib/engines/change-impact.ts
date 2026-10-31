@@ -2,13 +2,25 @@ import { EventPlan, ChangeImpactReport, ChangeImpactItem } from '@/lib/domain/ty
 import { recalculateBudget } from './budget'
 import { rescheduleTasks } from './timeline'
 
+/**
+ * Analyzes the downstream ripple effects of altering total event budget.
+ * Recalculates category allocations, flags overruns, and updates remaining funds.
+ *
+ * @param plan Active EventPlan
+ * @param newBudgetAmount Updated budget amount in minor currency units
+ * @returns Object containing the structured ChangeImpactReport and partial plan updates
+ */
 export function analyzeBudgetChange(
   plan: EventPlan,
   newBudgetAmount: number,
 ): { report: ChangeImpactReport; updatedPlan: Partial<EventPlan> } {
   const oldBudget = plan.budget.totalBudget
   const newBrief = { ...plan.brief, budgetAmount: newBudgetAmount }
-  const newBudget = recalculateBudget(newBrief, plan.budget.categories, plan.budget.contingencyPercent)
+  const newBudget = recalculateBudget(
+    newBrief,
+    plan.budget.categories,
+    plan.budget.contingencyPercent,
+  )
 
   const affectedCategories: ChangeImpactItem[] = newBudget.categories
     .filter((cat) => {
@@ -20,7 +32,9 @@ export function analyzeBudgetChange(
       description: `${cat.name}: allocation adjusted`,
       severity: newBudget.isOverBudget ? ('critical' as const) : ('info' as const),
       affectedIds: [cat.id],
-      previousValue: String(plan.budget.categories.find((c) => c.id === cat.id)?.allocatedAmount ?? 0),
+      previousValue: String(
+        plan.budget.categories.find((c) => c.id === cat.id)?.allocatedAmount ?? 0,
+      ),
       newValue: String(cat.allocatedAmount),
     }))
 
@@ -48,10 +62,17 @@ export function analyzeBudgetChange(
       changedAt: new Date().toISOString(),
       summary: `Budget ${direction} from ${oldBudget} to ${newBudgetAmount}`,
       whatChanged: `Total budget ${direction}`,
-      whatWasRecalculated: ['All budget category allocations', 'Remaining budget', 'Over-budget status'],
+      whatWasRecalculated: [
+        'All budget category allocations',
+        'Remaining budget',
+        'Over-budget status',
+      ],
       affectedItems: items,
       suggestedNextActions: newBudget.isOverBudget
-        ? ['Review and reduce allocations in non-essential categories', 'Consider removing optional vendor services']
+        ? [
+            'Review and reduce allocations in non-essential categories',
+            'Consider removing optional vendor services',
+          ]
         : ['Review new allocations to ensure they match your priorities'],
       hasAIRecommendation: newBudget.isOverBudget,
     },
@@ -59,13 +80,25 @@ export function analyzeBudgetChange(
   }
 }
 
+/**
+ * Analyzes the downstream ripple effects of altering guest count.
+ * Re-evaluates all per-guest budget categories (e.g. catering, bar, favors).
+ *
+ * @param plan Active EventPlan
+ * @param newGuestCount Updated guest count number
+ * @returns Object containing the structured ChangeImpactReport and partial plan updates
+ */
 export function analyzeGuestCountChange(
   plan: EventPlan,
   newGuestCount: number,
 ): { report: ChangeImpactReport; updatedPlan: Partial<EventPlan> } {
   const oldCount = plan.brief.guestCount
   const newBrief = { ...plan.brief, guestCount: newGuestCount }
-  const newBudget = recalculateBudget(newBrief, plan.budget.categories, plan.budget.contingencyPercent)
+  const newBudget = recalculateBudget(
+    newBrief,
+    plan.budget.categories,
+    plan.budget.contingencyPercent,
+  )
 
   const affectedItems: ChangeImpactItem[] = newBudget.categories
     .filter((c) => c.isPerGuest)
@@ -84,7 +117,11 @@ export function analyzeGuestCountChange(
       changedAt: new Date().toISOString(),
       summary: `Guest count changed from ${oldCount} to ${newGuestCount}`,
       whatChanged: `Guest count ${newGuestCount > oldCount ? 'increased' : 'decreased'}`,
-      whatWasRecalculated: ['Per-guest category allocations', 'Total estimated spend', 'Over-budget status'],
+      whatWasRecalculated: [
+        'Per-guest category allocations',
+        'Total estimated spend',
+        'Over-budget status',
+      ],
       affectedItems,
       suggestedNextActions: [
         'Notify caterer of updated headcount',
@@ -97,6 +134,14 @@ export function analyzeGuestCountChange(
   }
 }
 
+/**
+ * Analyzes the downstream ripple effects of shifting or rescheduling event date.
+ * Recalculates milestone deadlines and flags tasks that become overdue under the new date.
+ *
+ * @param plan Active EventPlan
+ * @param newDate New ISO date string or null
+ * @returns Object containing the structured ChangeImpactReport and partial plan updates
+ */
 export function analyzeEventDateChange(
   plan: EventPlan,
   newDate: string | null,
@@ -127,7 +172,9 @@ export function analyzeEventDateChange(
       whatWasRecalculated: ['All task due dates', 'Overdue status for each task'],
       affectedItems,
       suggestedNextActions: [
-        ...(nowOverdue.length > 0 ? [`${nowOverdue.length} task(s) are now overdue — act immediately`] : []),
+        ...(nowOverdue.length > 0
+          ? [`${nowOverdue.length} task(s) are now overdue — act immediately`]
+          : []),
         'Review all vendor booking deadlines for the new date',
         'Confirm all booked vendors can accommodate the new date',
       ],

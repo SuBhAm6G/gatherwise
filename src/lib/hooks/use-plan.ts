@@ -1,22 +1,30 @@
 'use client'
 
 import { useState, useCallback, useRef } from 'react'
-import { EventPlan, PlanTask, VendorCategory, EventIdea } from '@/lib/domain/types'
+import { EventPlan, PlanTask, VendorCategory, EventIdea, ChangeImpactReport } from '@/lib/domain/types'
 import { adjustCategoryAllocation, updateActualSpend } from '@/lib/engines/budget'
 import { refreshTaskStatuses } from '@/lib/engines/timeline'
 import { updateVendorStatus, updateVendorQuote } from '@/lib/engines/vendors'
-import { analyzeBudgetChange, analyzeGuestCountChange, analyzeEventDateChange } from '@/lib/engines/change-impact'
+import {
+  analyzeBudgetChange,
+  analyzeGuestCountChange,
+  analyzeEventDateChange,
+} from '@/lib/engines/change-impact'
 import { persistPlan } from '@/lib/storage/plan-store'
+import { AUTO_SAVE_DEBOUNCE_MS } from '@/lib/domain/constants'
 import { v4 as uuidv4 } from 'uuid'
 
 export type SaveStatus = 'saved' | 'saving' | 'unsaved' | 'error'
 
+/**
+ * Main reactive plan management hook.
+ * Handles debounced persistence, optimistic mutations, and change-impact tracking.
+ */
 export function usePlan(initialPlan: EventPlan | null) {
   const [plan, setPlan] = useState<EventPlan | null>(initialPlan)
   const [saveStatus, setSaveStatus] = useState<SaveStatus>('saved')
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  // Debounced auto-save — waits 800ms after last change
   const scheduleSave = useCallback((updatedPlan: EventPlan) => {
     if (saveTimer.current) clearTimeout(saveTimer.current)
     setSaveStatus('unsaved')
@@ -24,7 +32,7 @@ export function usePlan(initialPlan: EventPlan | null) {
       setSaveStatus('saving')
       const { success } = await persistPlan(updatedPlan)
       setSaveStatus(success ? 'saved' : 'error')
-    }, 800)
+    }, AUTO_SAVE_DEBOUNCE_MS)
   }, [])
 
   const updatePlan = useCallback(
@@ -38,8 +46,6 @@ export function usePlan(initialPlan: EventPlan | null) {
     },
     [scheduleSave],
   )
-
-  // ── Budget mutations ──────────────────────────────────────────────────────
 
   const adjustBudgetCategory = useCallback(
     (categoryId: string, newPercent: number) => {
@@ -61,8 +67,6 @@ export function usePlan(initialPlan: EventPlan | null) {
     [updatePlan],
   )
 
-  // ── Task mutations ────────────────────────────────────────────────────────
-
   const completeTask = useCallback(
     (taskId: string) => {
       updatePlan((prev) => {
@@ -82,11 +86,7 @@ export function usePlan(initialPlan: EventPlan | null) {
       updatePlan((prev) => {
         const tasks = prev.tasks.map((t) =>
           t.id === taskId
-            ? {
-                ...t,
-                status,
-                completedAt: status === 'completed' ? new Date().toISOString() : null,
-              }
+            ? { ...t, status, completedAt: status === 'completed' ? new Date().toISOString() : null }
             : t,
         )
         return { ...prev, tasks: refreshTaskStatuses(tasks) }
@@ -133,10 +133,7 @@ export function usePlan(initialPlan: EventPlan | null) {
           isDependencyBlocked: false,
           notes: '',
         }
-        return {
-          ...prev,
-          tasks: refreshTaskStatuses([...prev.tasks, newTask]),
-        }
+        return { ...prev, tasks: refreshTaskStatuses([...prev.tasks, newTask]) }
       })
     },
     [updatePlan],
@@ -151,8 +148,6 @@ export function usePlan(initialPlan: EventPlan | null) {
     },
     [updatePlan],
   )
-
-  // ── Vendor mutations ──────────────────────────────────────────────────────
 
   const setVendorStatus = useCallback(
     (vendorId: string, status: VendorCategory['status']) => {
@@ -184,32 +179,27 @@ export function usePlan(initialPlan: EventPlan | null) {
     [updatePlan],
   )
 
-  // ── Idea mutations ────────────────────────────────────────────────────────
-
   const toggleSaveIdea = useCallback(
     (ideaToToggle: EventIdea) => {
       updatePlan((prev) => {
         const exists = prev.ideas.some((i) => i.id === ideaToToggle.id)
-        let updatedIdeas: EventIdea[]
-        if (exists) {
-          updatedIdeas = prev.ideas.map((i) =>
-            i.id === ideaToToggle.id ? { ...i, isSaved: !i.isSaved } : i,
-          )
-        } else {
-          updatedIdeas = [...prev.ideas, { ...ideaToToggle, isSaved: true }]
-        }
+        const updatedIdeas = exists
+          ? prev.ideas.map((i) => (i.id === ideaToToggle.id ? { ...i, isSaved: !i.isSaved } : i))
+          : [...prev.ideas, { ...ideaToToggle, isSaved: true }]
         return { ...prev, ideas: updatedIdeas }
       })
     },
     [updatePlan],
   )
 
-  // ── Change-impact-aware brief mutations ───────────────────────────────────
-
-  const changeBudget = useCallback(
-    (newBudgetAmount: number) => {
+  const applyChange = useCallback(
+    (
+      analyzer: (
+        prev: EventPlan,
+      ) => { report: ChangeImpactReport; updatedPlan: Partial<EventPlan> },
+    ) => {
       updatePlan((prev) => {
-        const { report, updatedPlan } = analyzeBudgetChange(prev, newBudgetAmount)
+        const { report, updatedPlan } = analyzer(prev)
         return {
           ...prev,
           ...updatedPlan,
@@ -218,34 +208,21 @@ export function usePlan(initialPlan: EventPlan | null) {
       })
     },
     [updatePlan],
+  )
+
+  const changeBudget = useCallback(
+    (amount: number) => applyChange((p) => analyzeBudgetChange(p, amount)),
+    [applyChange],
   )
 
   const changeGuestCount = useCallback(
-    (newCount: number) => {
-      updatePlan((prev) => {
-        const { report, updatedPlan } = analyzeGuestCountChange(prev, newCount)
-        return {
-          ...prev,
-          ...updatedPlan,
-          changeHistory: [...prev.changeHistory.slice(-19), report],
-        }
-      })
-    },
-    [updatePlan],
+    (count: number) => applyChange((p) => analyzeGuestCountChange(p, count)),
+    [applyChange],
   )
 
   const changeEventDate = useCallback(
-    (newDate: string | null) => {
-      updatePlan((prev) => {
-        const { report, updatedPlan } = analyzeEventDateChange(prev, newDate)
-        return {
-          ...prev,
-          ...updatedPlan,
-          changeHistory: [...prev.changeHistory.slice(-19), report],
-        }
-      })
-    },
-    [updatePlan],
+    (date: string | null) => applyChange((p) => analyzeEventDateChange(p, date)),
+    [applyChange],
   )
 
   return {

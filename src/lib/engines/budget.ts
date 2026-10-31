@@ -142,7 +142,7 @@ export function formatCurrency(
 
 function getDefaultDescription(name: string): string {
   const map: Record<string, string> = {
-    'Venue': 'Rental cost of the event space including setup access',
+    Venue: 'Rental cost of the event space including setup access',
     'Catering & Bar': 'Food, beverages, and service staff costs (per guest)',
     'Photography & Video': 'Professional photography and/or videography coverage',
     'Music & Entertainment': 'DJ, band, or other entertainment',
@@ -151,7 +151,7 @@ function getDefaultDescription(name: string): string {
     'Food & Drinks': 'All food and beverages for guests (per guest)',
     'Entertainment & Activities': 'Entertainment, games, and activities',
     'Cake & Desserts': 'Celebration cake and dessert options (per guest)',
-    'Decorations': 'Venue decorations and themed props',
+    Decorations: 'Venue decorations and themed props',
     'Invitations & Favors': 'Invitations, party favors (per guest)',
     'Contingency Reserve': 'Buffer for unexpected costs — do not pre-allocate',
     'Equipment & AV': 'Sound systems, lighting, staging, and AV equipment',

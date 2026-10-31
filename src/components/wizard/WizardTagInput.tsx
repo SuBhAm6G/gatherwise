@@ -1,7 +1,5 @@
 'use client'
 
-import React from 'react'
-
 interface WizardTagInputProps {
   id: string
   label: string

@@ -155,15 +155,25 @@ describe('AI Prompt Builders & Guardrails', () => {
 
   describe('Prompt Anti-Hallucination & Security Guardrails', () => {
     it('IDEAS_SYSTEM_PROMPT contains explicit prohibitions against fabricating quotes and vendors', () => {
-      expect(IDEAS_SYSTEM_PROMPT).toContain('Never fabricate vendor names, prices, quotes, or market data')
+      expect(IDEAS_SYSTEM_PROMPT).toContain(
+        'Never fabricate vendor names, prices, quotes, or market data',
+      )
       expect(IDEAS_SYSTEM_PROMPT).toContain('Label cost estimates as "illustrative ranges"')
-      expect(IDEAS_SYSTEM_PROMPT).toContain('Return valid JSON matching the specified schema exactly')
+      expect(IDEAS_SYSTEM_PROMPT).toContain(
+        'Return valid JSON matching the specified schema exactly',
+      )
     })
 
     it('ASSISTANT_SYSTEM_PROMPT strictly prohibits contradicting deterministic engine numbers', () => {
-      expect(ASSISTANT_SYSTEM_PROMPT).toContain('Budget amounts, deadlines, and task counts come from the plan')
-      expect(ASSISTANT_SYSTEM_PROMPT).toContain('Do not fabricate vendor names, prices, availability, or market data')
-      expect(ASSISTANT_SYSTEM_PROMPT).toContain('Base answers strictly on the provided event plan data')
+      expect(ASSISTANT_SYSTEM_PROMPT).toContain(
+        'Budget amounts, deadlines, and task counts come from the plan',
+      )
+      expect(ASSISTANT_SYSTEM_PROMPT).toContain(
+        'Do not fabricate vendor names, prices, availability, or market data',
+      )
+      expect(ASSISTANT_SYSTEM_PROMPT).toContain(
+        'Base answers strictly on the provided event plan data',
+      )
       expect(ASSISTANT_SYSTEM_PROMPT).toContain('suggestedActions')
     })
   })

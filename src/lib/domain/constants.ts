@@ -8,6 +8,7 @@ export interface BudgetCategoryDefault {
   isContingency?: boolean
 }
 
+/** Default category percentage allocations by archetype */
 export const BUDGET_DEFAULTS: Record<EventType, BudgetCategoryDefault[]> = {
   wedding: [
     { name: 'Venue', percent: 30, isFixed: true, isPerGuest: false },
@@ -16,7 +17,13 @@ export const BUDGET_DEFAULTS: Record<EventType, BudgetCategoryDefault[]> = {
     { name: 'Flowers & Décor', percent: 8, isFixed: true, isPerGuest: false },
     { name: 'Music & Entertainment', percent: 7, isFixed: true, isPerGuest: false },
     { name: 'Attire & Beauty', percent: 5, isFixed: true, isPerGuest: false },
-    { name: 'Contingency Reserve', percent: 3, isFixed: true, isPerGuest: false, isContingency: true },
+    {
+      name: 'Contingency Reserve',
+      percent: 3,
+      isFixed: true,
+      isPerGuest: false,
+      isContingency: true,
+    },
   ],
   birthday: [
     { name: 'Venue', percent: 25, isFixed: true, isPerGuest: false },
@@ -24,7 +31,13 @@ export const BUDGET_DEFAULTS: Record<EventType, BudgetCategoryDefault[]> = {
     { name: 'Entertainment & Activities', percent: 15, isFixed: true, isPerGuest: false },
     { name: 'Cake & Desserts', percent: 10, isFixed: false, isPerGuest: true },
     { name: 'Decorations', percent: 10, isFixed: true, isPerGuest: false },
-    { name: 'Contingency Reserve', percent: 5, isFixed: true, isPerGuest: false, isContingency: true },
+    {
+      name: 'Contingency Reserve',
+      percent: 5,
+      isFixed: true,
+      isPerGuest: false,
+      isContingency: true,
+    },
   ],
   community: [
     { name: 'Venue & Permits', percent: 25, isFixed: true, isPerGuest: false },
@@ -33,10 +46,17 @@ export const BUDGET_DEFAULTS: Record<EventType, BudgetCategoryDefault[]> = {
     { name: 'Marketing & Communications', percent: 10, isFixed: true, isPerGuest: false },
     { name: 'Accessibility Services', percent: 5, isFixed: true, isPerGuest: false },
     { name: 'Safety & First Aid', percent: 5, isFixed: true, isPerGuest: false },
-    { name: 'Contingency Reserve', percent: 5, isFixed: true, isPerGuest: false, isContingency: true },
+    {
+      name: 'Contingency Reserve',
+      percent: 5,
+      isFixed: true,
+      isPerGuest: false,
+      isContingency: true,
+    },
   ],
 }
 
+/** Supported international currency options with minor unit precision */
 export const SUPPORTED_CURRENCIES = [
   { code: 'USD', symbol: '$', name: 'US Dollar', minorUnits: 2 },
   { code: 'GBP', symbol: '£', name: 'British Pound', minorUnits: 2 },
@@ -46,7 +66,13 @@ export const SUPPORTED_CURRENCIES = [
   { code: 'AUD', symbol: 'A$', name: 'Australian Dollar', minorUnits: 2 },
 ]
 
-export const EVENT_TYPE_OPTIONS: { id: EventType; label: string; icon: string; description: string }[] = [
+/** Configured milestone event options */
+export const EVENT_TYPE_OPTIONS: {
+  id: EventType
+  label: string
+  icon: string
+  description: string
+}[] = [
   {
     id: 'wedding',
     label: 'Wedding',
@@ -66,3 +92,16 @@ export const EVENT_TYPE_OPTIONS: { id: EventType; label: string; icon: string; d
     description: 'Block parties, cultural festivals, charity fundraisers, and neighborhood events.',
   },
 ]
+
+/** Window in days for classifying upcoming tasks on overview dashboard */
+export const UPCOMING_DAYS_WINDOW = 14
+
+/** Milliseconds in a full standard day */
+export const MS_PER_DAY = 86_400_000
+
+/** Debounce time for storage persistence */
+export const AUTO_SAVE_DEBOUNCE_MS = 800
+
+/** Default contingency reserve percentage bounds */
+export const CONTINGENCY_MIN_PERCENT = 3
+export const CONTINGENCY_MAX_PERCENT = 15

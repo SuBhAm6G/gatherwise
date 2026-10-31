@@ -1,7 +1,5 @@
 'use client'
 
-import React from 'react'
-
 interface WizardStepHeaderProps {
   step: number
   onCancel?: () => void
@@ -30,7 +28,13 @@ export function WizardStepHeader({ step, onCancel }: WizardStepHeaderProps) {
       </div>
 
       {/* Progress Bar */}
-      <div className="flex items-center gap-2" role="progressbar" aria-valuenow={step} aria-valuemin={1} aria-valuemax={4}>
+      <div
+        className="flex items-center gap-2"
+        role="progressbar"
+        aria-valuenow={step}
+        aria-valuemin={1}
+        aria-valuemax={4}
+      >
         {[1, 2, 3, 4].map((i) => (
           <div
             key={i}
@@ -39,13 +43,16 @@ export function WizardStepHeader({ step, onCancel }: WizardStepHeaderProps) {
               i < step
                 ? 'bg-indigo-500'
                 : i === step
-                ? 'bg-gradient-to-r from-indigo-500 to-pink-500'
-                : 'bg-white/10'
+                  ? 'bg-gradient-to-r from-indigo-500 to-pink-500'
+                  : 'bg-white/10'
             }`}
           />
         ))}
       </div>
-      <div className="flex justify-between text-xs text-slate-400 mt-2 font-medium" aria-hidden="true">
+      <div
+        className="flex justify-between text-xs text-slate-400 mt-2 font-medium"
+        aria-hidden="true"
+      >
         <span className={step >= 1 ? 'text-indigo-400' : ''}>1. Event Type</span>
         <span className={step >= 2 ? 'text-indigo-400' : ''}>2. Date & Budget</span>
         <span className={step >= 3 ? 'text-indigo-400' : ''}>3. Style & Context</span>

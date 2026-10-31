@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { EventType } from '@/lib/domain/types'
 import { EVENT_TYPE_OPTIONS } from '@/lib/domain/constants'
 import { ShieldAlert } from 'lucide-react'
@@ -51,7 +50,10 @@ export function WizardStep1General({
 
       <div>
         <label htmlFor="eventName" className="block text-sm font-semibold text-slate-200 mb-1">
-          Event Name <span className="text-rose-400" aria-hidden="true">*</span>
+          Event Name{' '}
+          <span className="text-rose-400" aria-hidden="true">
+            *
+          </span>
         </label>
         <input
           id="eventName"

@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { Bookmark, Lightbulb } from 'lucide-react'
 
 interface IdeasToolbarProps {
@@ -31,7 +30,8 @@ export function IdeasToolbar({
           <div className="flex items-center gap-2">
             <Lightbulb className="w-4 h-4 text-amber-400 shrink-0" aria-hidden="true" />
             <span>
-              <strong>Offline Mode:</strong> Showing deterministic planning suggestions curated for {eventType}s. Connect to internet for live AI generation.
+              <strong>Offline Mode:</strong> Showing deterministic planning suggestions curated for{' '}
+              {eventType}s. Connect to internet for live AI generation.
             </span>
           </div>
           <span className="text-2xs uppercase tracking-wider font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-300">
@@ -41,7 +41,10 @@ export function IdeasToolbar({
       )}
 
       {/* Filter Tabs */}
-      <nav aria-label="Idea filters" className="flex items-center gap-2 border-b border-white/10 pb-3 text-xs font-semibold">
+      <nav
+        aria-label="Idea filters"
+        className="flex items-center gap-2 border-b border-white/10 pb-3 text-xs font-semibold"
+      >
         <button
           type="button"
           onClick={() => onSelectFilter('all')}

@@ -6,37 +6,27 @@ export type PlanningUrgency = 'relaxed' | 'normal' | 'urgent' | 'last-minute'
 
 export type VenuePreference = 'indoor' | 'outdoor' | 'undecided'
 
-export type DiyPreference =
-  | 'full-diy'
-  | 'mostly-diy'
-  | 'mixed'
-  | 'mostly-managed'
-  | 'fully-managed'
+export type DiyPreference = 'full-diy' | 'mostly-diy' | 'mixed' | 'mostly-managed' | 'fully-managed'
 
 export type AudienceAgeGroup =
-  | 'children'
-  | 'teens'
-  | 'young-adults'
-  | 'adults'
-  | 'seniors'
-  | 'mixed'
+  'children' | 'teens' | 'young-adults' | 'adults' | 'seniors' | 'mixed'
 
 // ─── Event Brief (user input) ───────────────────────────────────────────────
 
 export interface EventBrief {
   eventType: EventType
   eventName: string
-  eventDate: string | null           // ISO date YYYY-MM-DD or null
-  budgetAmount: number               // in minor units (e.g. cents)
-  currencyCode: string               // ISO 4217 e.g. "USD", "INR", "GBP"
-  currencyMinorUnits: number         // 2 for most currencies
+  eventDate: string | null // ISO date YYYY-MM-DD or null
+  budgetAmount: number // in minor units (e.g. cents)
+  currencyCode: string // ISO 4217 e.g. "USD", "INR", "GBP"
+  currencyMinorUnits: number // 2 for most currencies
   guestCount: number
   location: string
   atmosphere: string
   primaryGoals: string[]
   importantConstraints: string[]
   planningUrgency: PlanningUrgency
-  startTime: string | null           // "HH:MM" 24h
+  startTime: string | null // "HH:MM" 24h
   endTime: string | null
   venuePreference: VenuePreference
   dietaryRequirements: string[]
@@ -55,10 +45,10 @@ export interface BudgetCategory {
   id: string
   name: string
   description: string
-  allocationPercent: number          // 0–100
-  allocatedAmount: number            // minor units, derived
-  estimatedSpend: number             // minor units, engine default
-  actualSpend: number                // minor units, user entered
+  allocationPercent: number // 0–100
+  allocatedAmount: number // minor units, derived
+  estimatedSpend: number // minor units, engine default
+  actualSpend: number // minor units, user entered
   isPerGuest: boolean
   isFixed: boolean
   isUserAdjusted: boolean
@@ -76,7 +66,7 @@ export interface BudgetPlan {
   remaining: number
   isOverBudget: boolean
   overBudgetAmount: number
-  lastCalculatedAt: string           // ISO datetime
+  lastCalculatedAt: string // ISO datetime
 }
 
 // ─── Timeline / Tasks ──────────────────────────────────────────────────────
@@ -105,16 +95,16 @@ export type TaskOrigin = 'template' | 'ai' | 'user'
 export type TaskStatus = 'pending' | 'in-progress' | 'completed' | 'blocked' | 'skipped'
 
 export interface PlanTask {
-  id: string                         // stable UUID
+  id: string // stable UUID
   title: string
   description: string
   category: TaskCategory
-  dueDate: string | null             // ISO date YYYY-MM-DD
-  dueDaysBeforeEvent: number | null  // positive = before event, negative = after
+  dueDate: string | null // ISO date YYYY-MM-DD
+  dueDaysBeforeEvent: number | null // positive = before event, negative = after
   priority: TaskPriority
   status: TaskStatus
   completedAt: string | null
-  dependsOn: string[]                // task IDs
+  dependsOn: string[] // task IDs
   relatedVendorCategory: string | null
   deadlineReason: string
   origin: TaskOrigin
@@ -126,12 +116,7 @@ export interface PlanTask {
 // ─── Vendors ───────────────────────────────────────────────────────────────
 
 export type VendorStatus =
-  | 'not-started'
-  | 'researching'
-  | 'contacted'
-  | 'quote-received'
-  | 'booked'
-  | 'not-needed'
+  'not-started' | 'researching' | 'contacted' | 'quote-received' | 'booked' | 'not-needed'
 
 export type VendorEssentiality = 'essential' | 'optional' | 'conditional'
 
@@ -143,8 +128,8 @@ export interface VendorCategory {
   bookingPriority: number
   suggestedBookingDaysBeforeEvent: number
   status: VendorStatus
-  allocatedBudget: number            // minor units
-  userQuote: number | null           // minor units
+  allocatedBudget: number // minor units
+  userQuote: number | null // minor units
   questionsToAsk: string[]
   contractItemsToConfirm: string[]
   notes: string
@@ -209,11 +194,7 @@ export interface ChangeImpactReport {
 // ─── Connectivity ──────────────────────────────────────────────────────────
 
 export type ConnectivityState =
-  | 'online'
-  | 'offline'
-  | 'reconnecting'
-  | 'ai-unavailable'
-  | 'storage-degraded'
+  'online' | 'offline' | 'reconnecting' | 'ai-unavailable' | 'storage-degraded'
 
 // ─── Full Plan ─────────────────────────────────────────────────────────────
 

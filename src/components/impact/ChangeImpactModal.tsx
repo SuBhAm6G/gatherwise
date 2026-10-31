@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { ChangeImpactReport } from '@/lib/domain/types'
 import { Clock, ArrowRight } from 'lucide-react'
 
@@ -48,7 +47,8 @@ export function ChangeImpactModal({ report, onClose }: ChangeImpactModalProps) {
                     <span className="capitalize">{item.area}</span>
                     <span>•</span>
                     <span>
-                      {item.previousValue} → <strong className="text-indigo-300">{item.newValue}</strong>
+                      {item.previousValue} →{' '}
+                      <strong className="text-indigo-300">{item.newValue}</strong>
                     </span>
                   </div>
                 </div>
@@ -58,8 +58,8 @@ export function ChangeImpactModal({ report, onClose }: ChangeImpactModalProps) {
                     item.severity === 'critical'
                       ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
                       : item.severity === 'warning'
-                      ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                      : 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
+                        ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                        : 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
                   }`}
                 >
                   {item.severity}

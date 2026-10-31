@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { EventBrief, BudgetPlan, EventIdea, IdeaCostCategory, IdeaEffort } from '@/lib/domain/types'
 import { getOfflineFallbackIdeas } from '@/lib/ai/fallback'
 import { Sparkles, RefreshCw, Lightbulb } from 'lucide-react'
@@ -64,14 +64,16 @@ export function IdeasPanel({ brief, budget, savedIdeas, onToggleSaveIdea }: Idea
           isSaved: false,
         }))
 
-        const combined = [...savedIdeas, ...formatted.filter((f) => !savedIdeas.some((s) => s.title === f.title))]
+        const combined = [
+          ...savedIdeas,
+          ...formatted.filter((f) => !savedIdeas.some((s) => s.title === f.title)),
+        ]
         setIdeas(combined)
         return
       }
 
       throw new Error('Invalid format returned from ideas endpoint')
-    } catch (err: unknown) {
-      console.warn('[GatherWise] AI ideas unavailable, falling back to deterministic ideas:', err)
+    } catch {
       const fallbackList = getOfflineFallbackIdeas(brief.eventType)
       const fallbackIdeas: EventIdea[] = fallbackList.map((f) => ({
         id: uuidv4(),
@@ -89,7 +91,10 @@ export function IdeasPanel({ brief, budget, savedIdeas, onToggleSaveIdea }: Idea
       }))
 
       setIsOfflineSource(true)
-      const combined = [...savedIdeas, ...fallbackIdeas.filter((f) => !savedIdeas.some((s) => s.title === f.title))]
+      const combined = [
+        ...savedIdeas,
+        ...fallbackIdeas.filter((f) => !savedIdeas.some((s) => s.title === f.title)),
+      ]
       setIdeas(combined)
     } finally {
       setIsLoading(false)
@@ -99,13 +104,19 @@ export function IdeasPanel({ brief, budget, savedIdeas, onToggleSaveIdea }: Idea
   const displayedIdeas = activeFilter === 'saved' ? ideas.filter((i) => i.isSaved) : ideas
 
   return (
-    <section aria-label="Event Inspiration and Brainstorming" className="space-y-6 max-w-7xl mx-auto pb-12">
+    <section
+      aria-label="Event Inspiration and Brainstorming"
+      className="space-y-6 max-w-7xl mx-auto pb-12"
+    >
       {/* Header */}
       <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white">Event Inspiration & Ideas</h1>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white">
+            Event Inspiration & Ideas
+          </h1>
           <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            Grounded suggestions tailored to your budget constraints, guest headcount, and chosen aesthetic.
+            Grounded suggestions tailored to your budget constraints, guest headcount, and chosen
+            aesthetic.
           </p>
         </div>
 
@@ -140,7 +151,10 @@ export function IdeasPanel({ brief, budget, savedIdeas, onToggleSaveIdea }: Idea
 
       {/* Ideas Grid */}
       {isLoading ? (
-        <div aria-live="polite" className="grid grid-cols-1 md:grid-cols-2 gap-4 py-8 animate-pulse">
+        <div
+          aria-live="polite"
+          className="grid grid-cols-1 md:grid-cols-2 gap-4 py-8 animate-pulse"
+        >
           {[1, 2, 3, 4].map((i) => (
             <div key={i} className="h-44 rounded-2xl bg-slate-800/50 border border-white/5" />
           ))}
@@ -150,7 +164,8 @@ export function IdeasPanel({ brief, budget, savedIdeas, onToggleSaveIdea }: Idea
           <Lightbulb className="w-8 h-8 text-indigo-400 mx-auto" aria-hidden="true" />
           <h2 className="text-base font-bold text-white">No ideas generated yet</h2>
           <p className="text-xs text-slate-400 max-w-md mx-auto">
-            Click &ldquo;Generate Ideas&rdquo; to prompt the system with your event atmosphere, budget, and guest count.
+            Click &ldquo;Generate Ideas&rdquo; to prompt the system with your event atmosphere,
+            budget, and guest count.
           </p>
           <button
             type="button"

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { BudgetPlan, EventBrief } from '@/lib/domain/types'
 import { formatCurrency } from '@/lib/engines/budget'
 import { ShieldAlert, Edit2 } from 'lucide-react'
@@ -44,9 +44,12 @@ export function BudgetEditor({
       {/* 1. Header & Summary Cards */}
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white">Budget Planner & Spend Tracker</h1>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white">
+            Budget Planner & Spend Tracker
+          </h1>
           <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            Allocations recalculate dynamically using integer minor units. Edit percentage allocations or record actual vendor invoices.
+            Allocations recalculate dynamically using integer minor units. Edit percentage
+            allocations or record actual vendor invoices.
           </p>
         </div>
 
@@ -109,10 +112,12 @@ export function BudgetEditor({
           </div>
           <div>
             <h2 id="budget-overrun-heading" className="font-bold text-sm sm:text-base text-white">
-              Budget Overrun Detected ({formatCurrency(budget.overBudgetAmount, currencyCode, precision)})
+              Budget Overrun Detected (
+              {formatCurrency(budget.overBudgetAmount, currencyCode, precision)})
             </h2>
             <p className="text-xs text-rose-300 mt-0.5">
-              Your combined estimated or recorded actual expenditures exceed the allocated total. Adjust category percentages or review non-essential expenses.
+              Your combined estimated or recorded actual expenditures exceed the allocated total.
+              Adjust category percentages or review non-essential expenses.
             </p>
           </div>
         </aside>
@@ -125,12 +130,18 @@ export function BudgetEditor({
       <BudgetDistributionBar categories={budget.categories} />
 
       {/* Category Allocation Editor Table */}
-      <section aria-labelledby="allocations-heading" className="rounded-2xl border border-white/10 bg-slate-900/60 overflow-hidden backdrop-blur-xl shadow-xl">
+      <section
+        aria-labelledby="allocations-heading"
+        className="rounded-2xl border border-white/10 bg-slate-900/60 overflow-hidden backdrop-blur-xl shadow-xl"
+      >
         <div className="p-4 sm:p-6 border-b border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
-            <h2 id="allocations-heading" className="text-base sm:text-lg font-bold text-white">Allocations by Category</h2>
+            <h2 id="allocations-heading" className="text-base sm:text-lg font-bold text-white">
+              Allocations by Category
+            </h2>
             <p className="text-xs text-slate-400">
-              Adjust percentage sliders to rebalance funds. Actual spend inputs update your remaining balance in real time.
+              Adjust percentage sliders to rebalance funds. Actual spend inputs update your
+              remaining balance in real time.
             </p>
           </div>
           <span className="text-xs text-slate-500 italic">

@@ -1,10 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { generateObject } from 'ai'
 import { z } from 'zod'
-import { getGeminiProvider, GEMINI_MODEL, FALLBACK_GEMINI_MODEL, AI_CONFIG } from '@/lib/ai/provider'
+import {
+  getGeminiProvider,
+  GEMINI_MODEL,
+  FALLBACK_GEMINI_MODEL,
+  AI_CONFIG,
+} from '@/lib/ai/provider'
 import { AIAssistantResponseSchema, parseAssistantResponse } from '@/lib/ai/schemas'
 import { ASSISTANT_SYSTEM_PROMPT, buildAssistantContext } from '@/lib/ai/prompts'
-import { EventBriefSchema, BudgetPlanSchema, PlanTaskSchema, VendorCategorySchema } from '@/lib/domain/schemas'
+import {
+  EventBriefSchema,
+  BudgetPlanSchema,
+  PlanTaskSchema,
+  VendorCategorySchema,
+} from '@/lib/domain/schemas'
 
 const RequestBodySchema = z.object({
   brief: EventBriefSchema,
@@ -56,14 +66,17 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     let result
     try {
       result = await callModel(GEMINI_MODEL)
-    } catch (primaryErr) {
-      console.warn(`[GatherWise] Model ${GEMINI_MODEL} failed, attempting ${FALLBACK_GEMINI_MODEL}:`, primaryErr)
+    } catch {
+      console.warn('[GatherWise] Primary model call failed, attempting fallback')
       result = await callModel(FALLBACK_GEMINI_MODEL)
     }
 
     const validated = parseAssistantResponse(result.object)
     if (!validated) {
-      return NextResponse.json({ error: 'AI response validation failed', requestId }, { status: 502 })
+      return NextResponse.json(
+        { error: 'AI response validation failed', requestId },
+        { status: 502 },
+      )
     }
 
     return NextResponse.json({ ...validated, requestId })
@@ -77,7 +90,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       )
     }
 
-    console.error('[GatherWise] Assistant API error:', message)
+    console.error('[GatherWise] Assistant API invocation error')
     return NextResponse.json(
       { error: 'AI service temporarily unavailable', code: 'AI_ERROR', requestId },
       { status: 503 },

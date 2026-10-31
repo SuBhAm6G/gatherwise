@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { Sparkles, ArrowRight, ArrowLeft } from 'lucide-react'
 
 interface WizardFooterNavProps {
@@ -10,12 +9,7 @@ interface WizardFooterNavProps {
   onFinish: () => void
 }
 
-export function WizardFooterNav({
-  step,
-  onBack,
-  onNext,
-  onFinish,
-}: WizardFooterNavProps) {
+export function WizardFooterNav({ step, onBack, onNext, onFinish }: WizardFooterNavProps) {
   return (
     <footer className="mt-8 pt-6 border-t border-white/10 flex items-center justify-between">
       {step > 1 ? (

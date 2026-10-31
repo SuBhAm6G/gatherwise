@@ -32,19 +32,29 @@ export type AIAssistantResponse = z.infer<typeof AIAssistantResponseSchema>
 
 // ─── Validation helpers ────────────────────────────────────────────────────
 
+/**
+ * Safely parses and validates arbitrary AI output against AIIdeasResponseSchema.
+ *
+ * @param raw Unknown payload from LLM
+ * @returns Validated AIIdeasResponse or null on schema mismatch
+ */
 export function parseIdeasResponse(raw: unknown): AIIdeasResponse | null {
   const result = AIIdeasResponseSchema.safeParse(raw)
   if (!result.success) {
-    console.warn('[GatherWise AI] Ideas response validation failed:', result.error.issues)
     return null
   }
   return result.data
 }
 
+/**
+ * Safely parses and validates arbitrary AI output against AIAssistantResponseSchema.
+ *
+ * @param raw Unknown payload from LLM
+ * @returns Validated AIAssistantResponse or null on schema mismatch
+ */
 export function parseAssistantResponse(raw: unknown): AIAssistantResponse | null {
   const result = AIAssistantResponseSchema.safeParse(raw)
   if (!result.success) {
-    console.warn('[GatherWise AI] Assistant response validation failed:', result.error.issues)
     return null
   }
   return result.data
