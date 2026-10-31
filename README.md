@@ -1,7 +1,8 @@
 # GatherWise: Adaptive, GenAI-Powered Event Planning Assistant
 
 > **PromptWars Challenge 5 Submission**  
-> *Plan less chaotically. Celebrate more confidently.*
+> *Plan less chaotically. Celebrate more confidently.*  
+> 🌐 **Live Production URL**: [https://gatherwise-wheat.vercel.app](https://gatherwise-wheat.vercel.app)
 
 ---
 
