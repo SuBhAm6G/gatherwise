@@ -1,7 +1,13 @@
 'use client'
 
 import { useState, useCallback, useRef } from 'react'
-import { EventPlan, PlanTask, VendorCategory, EventIdea, ChangeImpactReport } from '@/lib/domain/types'
+import {
+  EventPlan,
+  PlanTask,
+  VendorCategory,
+  EventIdea,
+  ChangeImpactReport,
+} from '@/lib/domain/types'
 import { adjustCategoryAllocation, updateActualSpend } from '@/lib/engines/budget'
 import { refreshTaskStatuses } from '@/lib/engines/timeline'
 import { updateVendorStatus, updateVendorQuote } from '@/lib/engines/vendors'
@@ -15,6 +21,27 @@ import { AUTO_SAVE_DEBOUNCE_MS } from '@/lib/domain/constants'
 import { v4 as uuidv4 } from 'uuid'
 
 export type SaveStatus = 'saved' | 'saving' | 'unsaved' | 'error'
+
+type NewTaskInput = Pick<
+  PlanTask,
+  'title' | 'description' | 'category' | 'dueDate' | 'priority' | 'deadlineReason'
+>
+
+function createUserTask(input: NewTaskInput): PlanTask {
+  return {
+    ...input,
+    id: uuidv4(),
+    dueDaysBeforeEvent: null,
+    status: 'pending',
+    completedAt: null,
+    dependsOn: [],
+    relatedVendorCategory: null,
+    origin: 'user',
+    isOverdue: false,
+    isDependencyBlocked: false,
+    notes: '',
+  }
+}
 
 /**
  * Main reactive plan management hook.
@@ -48,145 +75,107 @@ export function usePlan(initialPlan: EventPlan | null) {
   )
 
   const adjustBudgetCategory = useCallback(
-    (categoryId: string, newPercent: number) => {
-      updatePlan((prev) => ({
-        ...prev,
-        budget: adjustCategoryAllocation(prev.budget, prev.brief, categoryId, newPercent),
-      }))
+    (id: string, pct: number) => {
+      updatePlan((p) => ({ ...p, budget: adjustCategoryAllocation(p.budget, p.brief, id, pct) }))
     },
     [updatePlan],
   )
 
   const updateActualCategorySpend = useCallback(
-    (categoryId: string, actualSpend: number) => {
-      updatePlan((prev) => ({
-        ...prev,
-        budget: updateActualSpend(prev.budget, prev.brief, categoryId, actualSpend),
-      }))
+    (id: string, spend: number) => {
+      updatePlan((p) => ({ ...p, budget: updateActualSpend(p.budget, p.brief, id, spend) }))
     },
     [updatePlan],
   )
 
   const completeTask = useCallback(
-    (taskId: string) => {
-      updatePlan((prev) => {
-        const tasks = prev.tasks.map((t) =>
-          t.id === taskId
+    (id: string) => {
+      updatePlan((p) => {
+        const tasks = p.tasks.map((t) =>
+          t.id === id
             ? { ...t, status: 'completed' as const, completedAt: new Date().toISOString() }
             : t,
         )
-        return { ...prev, tasks: refreshTaskStatuses(tasks) }
+        return { ...p, tasks: refreshTaskStatuses(tasks) }
       })
     },
     [updatePlan],
   )
 
   const updateTaskStatus = useCallback(
-    (taskId: string, status: PlanTask['status']) => {
-      updatePlan((prev) => {
-        const tasks = prev.tasks.map((t) =>
-          t.id === taskId
-            ? { ...t, status, completedAt: status === 'completed' ? new Date().toISOString() : null }
+    (id: string, status: PlanTask['status']) => {
+      updatePlan((p) => {
+        const tasks = p.tasks.map((t) =>
+          t.id === id
+            ? {
+                ...t,
+                status,
+                completedAt: status === 'completed' ? new Date().toISOString() : null,
+              }
             : t,
         )
-        return { ...prev, tasks: refreshTaskStatuses(tasks) }
+        return { ...p, tasks: refreshTaskStatuses(tasks) }
       })
     },
     [updatePlan],
   )
 
   const updateTaskNotes = useCallback(
-    (taskId: string, notes: string) => {
-      updatePlan((prev) => ({
-        ...prev,
-        tasks: prev.tasks.map((t) => (t.id === taskId ? { ...t, notes } : t)),
-      }))
+    (id: string, notes: string) => {
+      updatePlan((p) => ({ ...p, tasks: p.tasks.map((t) => (t.id === id ? { ...t, notes } : t)) }))
     },
     [updatePlan],
   )
 
   const addTask = useCallback(
-    (newTaskData: {
-      title: string
-      description: string
-      category: PlanTask['category']
-      dueDate: string | null
-      priority: PlanTask['priority']
-      deadlineReason: string
-    }) => {
-      updatePlan((prev) => {
-        const newTask: PlanTask = {
-          id: uuidv4(),
-          title: newTaskData.title,
-          description: newTaskData.description,
-          category: newTaskData.category,
-          dueDate: newTaskData.dueDate,
-          dueDaysBeforeEvent: null,
-          priority: newTaskData.priority,
-          status: 'pending',
-          completedAt: null,
-          dependsOn: [],
-          relatedVendorCategory: null,
-          deadlineReason: newTaskData.deadlineReason,
-          origin: 'user',
-          isOverdue: false,
-          isDependencyBlocked: false,
-          notes: '',
-        }
-        return { ...prev, tasks: refreshTaskStatuses([...prev.tasks, newTask]) }
-      })
+    (input: NewTaskInput) => {
+      updatePlan((p) => ({
+        ...p,
+        tasks: refreshTaskStatuses([...p.tasks, createUserTask(input)]),
+      }))
     },
     [updatePlan],
   )
 
   const deleteTask = useCallback(
-    (taskId: string) => {
-      updatePlan((prev) => ({
-        ...prev,
-        tasks: refreshTaskStatuses(prev.tasks.filter((t) => t.id !== taskId)),
-      }))
+    (id: string) => {
+      updatePlan((p) => ({ ...p, tasks: refreshTaskStatuses(p.tasks.filter((t) => t.id !== id)) }))
     },
     [updatePlan],
   )
 
   const setVendorStatus = useCallback(
-    (vendorId: string, status: VendorCategory['status']) => {
-      updatePlan((prev) => ({
-        ...prev,
-        vendors: updateVendorStatus(prev.vendors, vendorId, status),
-      }))
+    (id: string, status: VendorCategory['status']) => {
+      updatePlan((p) => ({ ...p, vendors: updateVendorStatus(p.vendors, id, status) }))
     },
     [updatePlan],
   )
 
   const setVendorQuote = useCallback(
-    (vendorId: string, quote: number | null) => {
-      updatePlan((prev) => ({
-        ...prev,
-        vendors: updateVendorQuote(prev.vendors, vendorId, quote),
-      }))
+    (id: string, quote: number | null) => {
+      updatePlan((p) => ({ ...p, vendors: updateVendorQuote(p.vendors, id, quote) }))
     },
     [updatePlan],
   )
 
   const updateVendorNotes = useCallback(
-    (vendorId: string, notes: string) => {
-      updatePlan((prev) => ({
-        ...prev,
-        vendors: prev.vendors.map((v) => (v.id === vendorId ? { ...v, notes } : v)),
+    (id: string, notes: string) => {
+      updatePlan((p) => ({
+        ...p,
+        vendors: p.vendors.map((v) => (v.id === id ? { ...v, notes } : v)),
       }))
     },
     [updatePlan],
   )
 
   const toggleSaveIdea = useCallback(
-    (ideaToToggle: EventIdea) => {
-      updatePlan((prev) => {
-        const exists = prev.ideas.some((i) => i.id === ideaToToggle.id)
+    (idea: EventIdea) => {
+      updatePlan((p) => {
+        const exists = p.ideas.some((i) => i.id === idea.id)
         const updatedIdeas = exists
-          ? prev.ideas.map((i) => (i.id === ideaToToggle.id ? { ...i, isSaved: !i.isSaved } : i))
-          : [...prev.ideas, { ...ideaToToggle, isSaved: true }]
-        return { ...prev, ideas: updatedIdeas }
+          ? p.ideas.map((i) => (i.id === idea.id ? { ...i, isSaved: !i.isSaved } : i))
+          : [...p.ideas, { ...idea, isSaved: true }]
+        return { ...p, ideas: updatedIdeas }
       })
     },
     [updatePlan],
@@ -194,9 +183,10 @@ export function usePlan(initialPlan: EventPlan | null) {
 
   const applyChange = useCallback(
     (
-      analyzer: (
-        prev: EventPlan,
-      ) => { report: ChangeImpactReport; updatedPlan: Partial<EventPlan> },
+      analyzer: (prev: EventPlan) => {
+        report: ChangeImpactReport
+        updatedPlan: Partial<EventPlan>
+      },
     ) => {
       updatePlan((prev) => {
         const { report, updatedPlan } = analyzer(prev)
@@ -211,17 +201,15 @@ export function usePlan(initialPlan: EventPlan | null) {
   )
 
   const changeBudget = useCallback(
-    (amount: number) => applyChange((p) => analyzeBudgetChange(p, amount)),
+    (amt: number) => applyChange((p) => analyzeBudgetChange(p, amt)),
     [applyChange],
   )
-
   const changeGuestCount = useCallback(
-    (count: number) => applyChange((p) => analyzeGuestCountChange(p, count)),
+    (cnt: number) => applyChange((p) => analyzeGuestCountChange(p, cnt)),
     [applyChange],
   )
-
   const changeEventDate = useCallback(
-    (date: string | null) => applyChange((p) => analyzeEventDateChange(p, date)),
+    (dt: string | null) => applyChange((p) => analyzeEventDateChange(p, dt)),
     [applyChange],
   )
 

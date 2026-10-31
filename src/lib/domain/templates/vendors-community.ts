@@ -53,10 +53,7 @@ export const COMMUNITY_VENDORS: VendorTemplate[] = [
       'Do you have food-safety certification?',
       'What is your setup space and power requirement?',
     ],
-    contractItemsToConfirm: [
-      'Food safety documentation',
-      'Dietary options confirmed',
-    ],
+    contractItemsToConfirm: ['Food safety documentation', 'Dietary options confirmed'],
     nextAction: 'Decide on catering approach based on budget and community preferences',
   },
   {
@@ -97,4 +94,3 @@ export const COMMUNITY_VENDORS: VendorTemplate[] = [
     nextAction: 'Reach out to local performers for expressions of interest',
   },
 ]
-

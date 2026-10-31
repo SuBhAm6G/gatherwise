@@ -78,4 +78,3 @@ export const BIRTHDAY_VENDORS: VendorTemplate[] = [
     nextAction: 'Decide between home cooking, delivery, or professional catering',
   },
 ]
-

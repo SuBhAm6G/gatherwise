@@ -108,4 +108,3 @@ export const WEDDING_VENDORS: VendorTemplate[] = [
     nextAction: 'Listen to recordings or attend a live performance before booking',
   },
 ]
-

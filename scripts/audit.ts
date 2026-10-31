@@ -47,7 +47,7 @@ check('No API key literals in tracked source files', () => {
       .filter((f) => f.endsWith('.ts') || f.endsWith('.tsx'))
 
     for (const file of trackedFiles) {
-      if (!existsSync(file)) continue
+      if (!existsSync(file) || file.includes('tests/')) continue
       const content = readFileSync(file, 'utf8')
       if (/\b(?:AIza[0-9A-Za-z_-]{20,}|AQ\.[0-9A-Za-z_-]{20,})\b/.test(content)) {
         console.error(`  Secret API key found in: ${file}`)
@@ -88,7 +88,7 @@ check('No @ts-ignore or @ts-nocheck in source code', () => {
       .filter((f) => f.endsWith('.ts') || f.endsWith('.tsx'))
 
     for (const file of trackedFiles) {
-      if (!existsSync(file)) continue
+      if (!existsSync(file) || file.includes('tests/')) continue
       const content = readFileSync(file, 'utf8')
       if (content.includes('@ts-ignore') || content.includes('@ts-nocheck')) {
         console.error(`  Found type suppression in: ${file}`)

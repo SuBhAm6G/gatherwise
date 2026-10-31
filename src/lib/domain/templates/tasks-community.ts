@@ -132,4 +132,3 @@ export const COMMUNITY_TASKS: TaskTemplate[] = [
     notes: '',
   },
 ]
-

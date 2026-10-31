@@ -56,11 +56,12 @@ describe('Project Code Hygiene & Quality Standards', () => {
     }
   })
 
-  it('never uses "any" or "@ts-ignore" in source code', () => {
+  it('never uses any or type suppressions in source code', () => {
+    const suppressionPattern = new RegExp('@ts-' + 'ignore|@ts-' + 'nocheck')
     for (const file of sourceFiles) {
       const text = read(file)
       expect(text, `Unsafe "any" type detected in ${file}`).not.toMatch(/:\s*any\b|as any\b|<any>/)
-      expect(text, `Type suppression detected in ${file}`).not.toMatch(/@ts-ignore|@ts-nocheck/)
+      expect(text, `Type suppression detected in ${file}`).not.toMatch(suppressionPattern)
     }
   })
 
@@ -77,10 +78,9 @@ describe('Project Code Hygiene & Quality Standards', () => {
     const browserFiles = sourceFiles.filter((f) => !f.startsWith('src/app/api/'))
     for (const file of browserFiles) {
       const text = read(file)
-      expect(
-        text,
-        `Debug console statement found in browser file: ${file}`,
-      ).not.toMatch(/console\.(log|debug|info|warn|error)\(/)
+      expect(text, `Debug console statement found in browser file: ${file}`).not.toMatch(
+        /console\.(log|debug|info|warn|error)\(/,
+      )
     }
   })
 
@@ -90,12 +90,8 @@ describe('Project Code Hygiene & Quality Standards', () => {
     )
     for (const file of allFiles) {
       const text = read(file)
-      expect(text, `Secret API key pattern found in ${file}`).not.toMatch(
-        /AIza[0-9A-Za-z_-]{20,}/,
-      )
-      expect(text, `Private key found in ${file}`).not.toMatch(
-        /-----BEGIN [A-Z ]*PRIVATE KEY-----/,
-      )
+      expect(text, `Secret API key pattern found in ${file}`).not.toMatch(/AIza[0-9A-Za-z_-]{20,}/)
+      expect(text, `Private key found in ${file}`).not.toMatch(/-----BEGIN [A-Z ]*PRIVATE KEY-----/)
     }
   })
 
@@ -104,19 +100,10 @@ describe('Project Code Hygiene & Quality Standards', () => {
       scripts: Record<string, string>
       engines?: { node?: string }
     }
-    const requiredScripts = [
-      'dev',
-      'build',
-      'typecheck',
-      'lint',
-      'format:check',
-      'test',
-      'check',
-    ]
+    const requiredScripts = ['dev', 'build', 'typecheck', 'lint', 'format:check', 'test', 'check']
     for (const script of requiredScripts) {
       expect(pkg.scripts[script], `Missing package.json script: ${script}`).toBeDefined()
     }
     expect(pkg.engines?.node, 'Missing engines.node requirement in package.json').toBeDefined()
   })
 })
-

@@ -106,4 +106,3 @@ export const BIRTHDAY_TASKS: TaskTemplate[] = [
     notes: '',
   },
 ]
-

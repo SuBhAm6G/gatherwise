@@ -145,4 +145,3 @@ export const WEDDING_TASKS: TaskTemplate[] = [
     notes: '',
   },
 ]
-
