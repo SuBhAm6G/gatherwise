@@ -1,0 +1,7 @@
+# GatherWise
+> Adaptive, GenAI-Powered Event Planning Assistant
+
+- System Overview: An adaptive event planning application combining deterministic budgeting, milestone timeline scheduling, vendor diligence checklists, and Gemini 3.1 Flash Lite intelligence.
+- Core Capabilities: Event brief generation, integer minor-unit budget allocation, lead-time timeline computation, vendor tracking, and change-impact analysis.
+- Technology Stack: Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v4, Vercel AI SDK, Google Gemini 3.1 Flash Lite.
+- Documentation: docs/ARCHITECTURE.md, docs/SECURITY.md, docs/TESTING.md

@@ -1,69 +1,158 @@
-import Image from "next/image";
+'use client'
 
-export default function Home() {
+import React, { useState, useEffect } from 'react'
+import { EventPlan, EventBrief, ChangeImpactReport } from '@/lib/domain/types'
+import { usePlan } from '@/lib/hooks/use-plan'
+import { Header } from '@/components/ui/Header'
+import { EventWizard } from '@/components/wizard/EventWizard'
+import { ChangeImpactModal } from '@/components/impact/ChangeImpactModal'
+import { LandingHero } from '@/components/home/LandingHero'
+import { SavedPlansDrawer } from '@/components/home/SavedPlansDrawer'
+import { PlanTabContent } from '@/components/home/PlanTabContent'
+import { createPlanFromBrief, createDemoPlan, retrieveAllPlans, removePlan } from '@/lib/storage/plan-store'
+
+export default function HomePage() {
+  const [plansList, setPlansList] = useState<EventPlan[]>([])
+  const [isCreatingNew, setIsCreatingNew] = useState(false)
+  const [currentTab, setCurrentTab] = useState<string>('overview')
+  const [activeImpactReport, setActiveImpactReport] = useState<ChangeImpactReport | null>(null)
+
+  const {
+    plan,
+    setPlan,
+    saveStatus,
+    adjustBudgetCategory,
+    updateActualCategorySpend,
+    completeTask,
+    updateTaskStatus,
+    updateTaskNotes,
+    addTask,
+    deleteTask,
+    setVendorStatus,
+    setVendorQuote,
+    updateVendorNotes,
+    toggleSaveIdea,
+    changeBudget,
+  } = usePlan(null)
+
+  useEffect(() => {
+    async function load() {
+      const saved = await retrieveAllPlans()
+      setPlansList(saved)
+    }
+    load()
+  }, [plan])
+
+  const lastReportCount = React.useRef(0)
+  useEffect(() => {
+    if (plan && plan.changeHistory.length > lastReportCount.current) {
+      const latest = plan.changeHistory[plan.changeHistory.length - 1]
+      lastReportCount.current = plan.changeHistory.length
+      if (latest) {
+        const timer = setTimeout(() => {
+          setActiveImpactReport(latest)
+        }, 0)
+        return () => clearTimeout(timer)
+      }
+    }
+  }, [plan])
+
+  const handlePlanCreated = (brief: EventBrief) => {
+    const newPlan = createPlanFromBrief(brief)
+    setPlan(newPlan)
+    setIsCreatingNew(false)
+    setCurrentTab('overview')
+  }
+
+  const handleLoadDemo = () => {
+    const demo = createDemoPlan()
+    setPlan(demo)
+    setIsCreatingNew(false)
+    setCurrentTab('overview')
+  }
+
+  const handleSelectPlan = (selected: EventPlan) => {
+    setPlan(selected)
+    setCurrentTab('overview')
+  }
+
+  const handleDeletePlan = async (e: React.MouseEvent, id: string) => {
+    e.stopPropagation()
+    if (confirm('Are you sure you want to delete this event plan?')) {
+      await removePlan(id)
+      setPlansList((prev) => prev.filter((p) => p.id !== id))
+      if (plan?.id === id) {
+        setPlan(null)
+      }
+    }
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
+    <div className="min-h-screen bg-[#070814] text-slate-100 flex flex-col font-sans">
+      <Header
+        currentTab={currentTab}
+        onTabChange={setCurrentTab}
+        eventName={plan ? plan.brief.eventName : undefined}
+        isDemoData={plan?.isDemoData}
+        saveStatus={saveStatus}
+        onBackToPlans={plan ? () => setPlan(null) : undefined}
+        onNewPlan={() => {
+          setIsCreatingNew(true)
+          setPlan(null)
+        }}
+      />
+
+      <main id="main-content" className="flex-1 p-4 sm:p-6 lg:p-8">
+        {/* VIEW 1: CREATING NEW PLAN VIA WIZARD */}
+        {isCreatingNew && (
+          <EventWizard
+            onPlanCreated={handlePlanCreated}
+            onCancel={() => setIsCreatingNew(false)}
+          />
+        )}
+
+        {/* VIEW 2: ACTIVE PLAN TABS */}
+        {!isCreatingNew && plan && (
+          <PlanTabContent
+            currentTab={currentTab}
+            plan={plan}
+            onNavigateTab={setCurrentTab}
+            onCompleteTask={completeTask}
+            onAdjustBudgetCategory={adjustBudgetCategory}
+            onUpdateActualCategorySpend={updateActualCategorySpend}
+            onChangeTotalBudget={changeBudget}
+            onUpdateTaskStatus={updateTaskStatus}
+            onUpdateTaskNotes={updateTaskNotes}
+            onAddTask={addTask}
+            onDeleteTask={deleteTask}
+            onSetVendorStatus={setVendorStatus}
+            onSetVendorQuote={setVendorQuote}
+            onUpdateVendorNotes={updateVendorNotes}
+            onToggleSaveIdea={toggleSaveIdea}
+          />
+        )}
+
+        {/* VIEW 3: LANDING / PLAN SELECTOR (When no active plan) */}
+        {!isCreatingNew && !plan && (
+          <div className="max-w-6xl mx-auto py-12 px-4 space-y-12">
+            <LandingHero
+              onStartNewPlan={() => setIsCreatingNew(true)}
+              onLoadDemoPlan={handleLoadDemo}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+
+            <SavedPlansDrawer
+              plans={plansList}
+              onSelectPlan={handleSelectPlan}
+              onDeletePlan={handleDeletePlan}
+            />
+          </div>
+        )}
       </main>
+
+      <ChangeImpactModal
+        report={activeImpactReport}
+        onClose={() => setActiveImpactReport(null)}
+      />
     </div>
-  );
+  )
 }
